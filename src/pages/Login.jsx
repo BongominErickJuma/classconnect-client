@@ -30,7 +30,7 @@ const LoginForm = ({ onLoginSuccess }) => (
       <a href="#" className="hover:underline" style={{ color: "var(--color-text-base)" }}>
         Forgot password?
       </a>
-      <a href="/cc/signup" className="hover:underline" style={{ color: "var(--color-accent)" }}>
+      <a href="/classconnect-client/signup" className="hover:underline" style={{ color: "var(--color-accent)" }}>
         Signup?
       </a>
     </div>
@@ -40,7 +40,7 @@ const LoginForm = ({ onLoginSuccess }) => (
 const LoginPage = () => {
   const navigate = useNavigate();
   const onLoginSuccess = () => {
-    navigate("/cc/dashboard");
+    navigate("/classconnect-client/dashboard");
   };
   return (
     <div
@@ -53,7 +53,11 @@ const LoginPage = () => {
           className="w-1/2 flex items-center justify-center p-8"
           style={{ backgroundColor: "var(--color-light-bg)" }}
         >
-          <img src="/cc/images/img_desk.png" alt="Desktop App Logo" className="w-full max-w-xs object-contain" />
+          <img
+            src="/classconnect-client/images/img_desk.png"
+            alt="Desktop App Logo"
+            className="w-full max-w-xs object-contain"
+          />
         </div>
         <div className="w-1/2 p-8">
           <div className="mb-6 flex flex-col items-center">
@@ -76,7 +80,11 @@ const LoginPage = () => {
         style={{ backgroundColor: "var(--color-light-bg)" }}
       >
         <div className="mb-6 flex flex-col items-center">
-          <img src="/cc/images/img_phone.png" alt="Mobile App Logo" className="w-16 h-16 mb-3 object-contain" />
+          <img
+            src="/classconnect-client/images/img_phone.png"
+            alt="Mobile App Logo"
+            className="w-16 h-16 mb-3 object-contain"
+          />
 
           <h1 className="text-3xl font-bold flex items-center gap-2" style={{ color: "var(--color-accent)" }}>
             <Logo />

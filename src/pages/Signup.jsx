@@ -96,7 +96,7 @@ const SignupForm = ({ step, formData, handleChange, handleContinue, handleSubmit
     <div className="text-center pt-4">
       <p className="text-sm" style={{ color: "var(--color-text-base)" }}>
         Already have an account?{" "}
-        <a href="/cc/login" className="hover:underline" style={{ color: "var(--color-accent)" }}>
+        <a href="/classconnect-client/login" className="hover:underline" style={{ color: "var(--color-accent)" }}>
           Log in
         </a>
       </p>
@@ -131,7 +131,7 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("/cc/dashboard");
+    navigate("/classconnect-client/dashboard");
   };
 
   const renderFormLayout = (isMobile) => (
@@ -141,13 +141,21 @@ const SignupPage = () => {
           className="w-1/2 flex items-center justify-center p-8"
           style={{ backgroundColor: "var(--color-light-bg)" }}
         >
-          <img src="/cc/images/img_desk.png" alt="Desktop App Logo" className="w-full max-w-xs object-contain" />
+          <img
+            src="/classconnect-client/images/img_desk.png"
+            alt="Desktop App Logo"
+            className="w-full max-w-xs object-contain"
+          />
         </div>
       )}
       <div className={isMobile ? "" : "w-1/2 p-8"}>
         <div className="flex flex-col items-center mb-6">
           {isMobile && (
-            <img src="/cc/images/img_phone.png" alt="Mobile App Logo" className="w-16 h-16 mb-3 object-contain" />
+            <img
+              src="/classconnect-client/images/img_phone.png"
+              alt="Mobile App Logo"
+              className="w-16 h-16 mb-3 object-contain"
+            />
           )}
           <h1 className="text-3xl font-bold flex items-center gap-2" style={{ color: "var(--color-accent)" }}>
             <Logo />

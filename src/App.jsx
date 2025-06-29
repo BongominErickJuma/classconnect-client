@@ -12,10 +12,10 @@ const App = () => {
     >
       <Router>
         <Routes>
-          <Route path="/cc" element={<LoginPage />} />
-          <Route path="/cc/login" element={<LoginPage />} />
-          <Route path="/cc/signup" element={<SignupPage />} />
-          <Route path="/cc/dashboard" element={<Dashboard />} />
+          <Route path="/classconnect-client" element={<LoginPage />} />
+          <Route path="/classconnect-client/login" element={<LoginPage />} />
+          <Route path="/classconnect-client/signup" element={<SignupPage />} />
+          <Route path="/classconnect-client/dashboard" element={<Dashboard />} />
         </Routes>
       </Router>
     </div>
