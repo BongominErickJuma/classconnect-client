@@ -22,7 +22,7 @@ const Dashboard = () => {
   // Mock user data
   const user = {
     name: "Bongomin",
-    profile_photo: "/classconnect-client/images/img_phone.png",
+    profile_photo: "/images/img_phone.png",
     role: "student", // or "instructor"
   };
 
@@ -177,7 +177,7 @@ const Dashboard = () => {
                     Settings
                   </a>
                   <a
-                    href="/classconnect-client/login"
+                    href="/login"
                     className="block px-4 py-2 hover:opacity-90"
                     style={{ color: "var(--color-text-base)" }}
                   >
