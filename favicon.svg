@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Circle background -->
+  <circle cx="64" cy="64" r="60" fill="#4e8ea8" />
+  
+  <!-- Centered C -->
+  <text
+    x="64"
+    y="80"
+    font-size="64"
+    text-anchor="middle"
+    fill="#ffffff"
+    font-family="Arial, sans-serif"
+    font-weight="bold"
+    dominant-baseline="middle"
+  >
+    CC
+  </text>
+</svg>

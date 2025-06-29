@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  /* Primary Colors */
+  --color-primary-bg: #e6f0fa;
+  --color-accent: #4e8ea8;
+  --color-success: #32cd32;
+
+  /* Neutral Colors */
+  --color-text-base: #333333;
+  --color-light-bg: #fafafa;
+
+  /* Status Colors */
+  --color-alert: #ff6b6b;
+
+  --font-primary: "Jost";
+  --font-secondary: "Roboto";
+}
+
+body {
+  font-family: var(--font-secondary);
+  color: var(--color-text-base);
+}
+
+label {
+  font-family: var(--font-primary);
+  color: var(--color-text-base);
+}
+
+input {
+  background-color: var(--color-light-bg);
+  font-family: var(--font-primary);
+  color: var(--color-text-base);
+  border: 1px solid var(--color-text-base);
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border: 1px solid var(--color-accent);
+}
+button {
+  cursor: pointer;
+  font-family: var(--font-primary);
+  background-color: var(--color-accent);
+}
+
+.profile-btn {
+  background-color: transparent;
+}
+
+.icon {
+  color: var(--color-text-base);
+  opacity: 0.7;
+  font-weight: 400;
+}

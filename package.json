@@ -1,0 +1,30 @@
+{
+  "homepage": "https://bongominerickjuma.github.io/classconnect-client",
+  "name": "class-connect",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist ",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/jost": "^5.2.6",
+    "@fontsource/roboto": "^5.2.6",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@tailwindcss/vite": "^4.0.0",
+    "@vitejs/plugin-react": "^4.6.0",
+    "axios": "^1.7.9",
+    "gh-pages": "^6.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
+    "react-router-dom": "^7.1.5",
+    "tailwindcss": "^4.0.0"
+  }
+}
