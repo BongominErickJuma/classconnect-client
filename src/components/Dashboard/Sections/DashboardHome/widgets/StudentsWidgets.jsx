@@ -92,7 +92,7 @@ const StudentsWidgets = ({ user }) => {
         </div>
 
         {/* Right Column (Announcements) */}
-        <div className="flex-1 lg:max-w-md">
+        <div className="flex-1">
           <Section title="Announcements" icon={faBullhorn}>
             <ul className="text-sm text-gray-700 list-disc ml-6">
               {announcements.map((a, idx) => (
