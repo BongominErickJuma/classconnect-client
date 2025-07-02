@@ -10,7 +10,10 @@ const DesktopHeader = ({ user, isProfileOpen, toggleProfile }) => {
       className="hidden md:flex shadow-sm h-16 items-center justify-between px-6 w-full rounded-tr-2xl"
       style={{ backgroundColor: "white" }}
     >
-      <h2 className="text-lg font-medium" style={{ color: "var(--color-text-base)" }}>
+      <h2
+        className="text-lg font-medium"
+        style={{ color: "var(--color-text-base)", fontFamily: "var(--font-primary)" }}
+      >
         Welcome back, {user.name}
       </h2>
       <div className="flex items-center space-x-6">
