@@ -15,6 +15,7 @@ api.interceptors.response.use(
   (error) => {
     // Standard error handling
     if (error.response) {
+      console.log(error.response);
       const message = error.response.data?.message || "An error occurred";
       return Promise.reject(new Error(message));
     } else if (error.request) {
