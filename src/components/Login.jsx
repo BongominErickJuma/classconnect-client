@@ -1,47 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLock, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import Logo from "../svgs/Logo";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../Services/api";
 
-// Reusable Input Field
-const InputField = ({ type, icon, label, placeholder }) => (
+// Enhanced InputField component with value and onChange
+const InputField = ({ type, icon, label, placeholder, value, onChange, name }) => (
   <div className="relative">
     <label className="block mb-2 text-sm font-medium">{label}</label>
     <div className="relative">
       <FontAwesomeIcon icon={icon} className="absolute left-3 top-1/2 transform -translate-y-1/2 icon" />
-      <input type={type} placeholder={placeholder} required className="w-full p-3 pl-10 rounded-lg font-normal" />
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        required
+        className="w-full p-3 pl-10 rounded-lg font-normal"
+      />
     </div>
   </div>
 );
 
-// Reusable Login Form
-const LoginForm = ({ onLoginSuccess }) => (
-  <form className="space-y-4 sm:space-y-6" onSubmit={((e) => e.preventDefault(), onLoginSuccess())}>
-    <InputField type="email" icon={faEnvelope} label="Email address" placeholder="your@email.com" />
-    <InputField type="password" icon={faLock} label="Password" placeholder="••••••••" />
-
-    <button type="submit" className="w-full py-3 px-4 rounded-lg font-medium transition-colors text-white">
-      Log in
-    </button>
-
-    {/* Flex container for links */}
-    <div className="flex justify-between pt-2 text-sm">
-      <a href="#" className="hover:underline" style={{ color: "var(--color-text-base)" }}>
-        Forgot password?
-      </a>
-      <a href="/signup" className="hover:underline" style={{ color: "var(--color-accent)" }}>
-        Signup?
-      </a>
-    </div>
-  </form>
-);
-
 const LoginPage = () => {
   const navigate = useNavigate();
-  const onLoginSuccess = () => {
-    navigate("/dashboard");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      await authService.login(formData);
+
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message || "Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
@@ -66,7 +81,46 @@ const LoginPage = () => {
             </h2>
           </div>
 
-          <LoginForm onLoginSuccess={() => onLoginSuccess} />
+          {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">{error}</div>}
+
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            <InputField
+              type="email"
+              name="email"
+              icon={faEnvelope}
+              label="Email address"
+              placeholder="your@email.com"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <InputField
+              type="password"
+              name="password"
+              icon={faLock}
+              label="Password"
+              placeholder="••••••••"
+              value={formData.password}
+              onChange={handleChange}
+            />
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-3 px-4 rounded-lg font-medium transition-colors text-white"
+              style={{ backgroundColor: "var(--color-accent)", opacity: isLoading ? 0.7 : 1 }}
+            >
+              {isLoading ? "Logging in..." : "Log in"}
+            </button>
+
+            <div className="flex justify-between pt-2 text-sm">
+              <a href="#" className="hover:underline" style={{ color: "var(--color-text-base)" }}>
+                Forgot password?
+              </a>
+              <a href="/signup" className="hover:underline" style={{ color: "var(--color-accent)" }}>
+                Signup?
+              </a>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -86,7 +140,47 @@ const LoginPage = () => {
             Welcome Back
           </h2>
         </div>
-        <LoginForm onLoginSuccess={() => onLoginSuccess} />{" "}
+
+        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <InputField
+            type="email"
+            name="email"
+            icon={faEnvelope}
+            label="Email address"
+            placeholder="your@email.com"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <InputField
+            type="password"
+            name="password"
+            icon={faLock}
+            label="Password"
+            placeholder="••••••••"
+            value={formData.password}
+            onChange={handleChange}
+          />
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 px-4 rounded-lg font-medium transition-colors text-white"
+            style={{ backgroundColor: "var(--color-accent)", opacity: isLoading ? 0.7 : 1 }}
+          >
+            {isLoading ? "Logging in..." : "Log in"}
+          </button>
+
+          <div className="flex justify-between pt-2 text-sm">
+            <a href="#" className="hover:underline" style={{ color: "var(--color-text-base)" }}>
+              Forgot password?
+            </a>
+            <a href="/signup" className="hover:underline" style={{ color: "var(--color-accent)" }}>
+              Signup?
+            </a>
+          </div>
+        </form>
       </div>
     </div>
   );
