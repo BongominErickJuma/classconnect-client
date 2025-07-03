@@ -1,6 +1,6 @@
 // src/components/auth/Signup/SignupPage.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { authService } from "../../../Services/api";
 
 import SignupForm from "./SignupForm";
@@ -17,8 +17,7 @@ const SignupPage = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
-
-  const navigate = useNavigate();
+  const [signupMessage, setSignupMessage] = useState("");
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -77,6 +76,7 @@ const SignupPage = () => {
         });
 
         if (response.status === "success") {
+          setSignupMessage(response.message);
           setSignupSuccess(true);
         }
       } catch (error) {
@@ -98,7 +98,7 @@ const SignupPage = () => {
   };
 
   if (signupSuccess) {
-    return <SuccessMessage email={formData.email} />;
+    return <SuccessMessage message={signupMessage} />;
   }
 
   return (
