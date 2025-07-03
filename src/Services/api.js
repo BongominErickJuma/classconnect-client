@@ -2,7 +2,8 @@ import axios from "axios";
 
 // Create axios instance with base config
 const api = axios.create({
-  baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl",
+  baseURL: "http://localhost:3000/api/v1/ecl",
+  // baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -41,5 +42,8 @@ export const authService = {
   },
   getMe: async () => {
     return api.get("/users/me");
+  },
+  verifyEmail: async (userData) => {
+    return api.patch("/users/verify-email/:token", userData);
   },
 };

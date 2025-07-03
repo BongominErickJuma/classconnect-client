@@ -55,7 +55,7 @@ const LoginDesktop = ({ formData, handleChange, handleSubmit, isLoading, error }
         </button>
 
         <div className="flex justify-between pt-2 text-sm">
-          <a href="#" className="hover:underline" style={{ color: "var(--color-text-base)" }}>
+          <a href="/forgot-password" className="hover:underline" style={{ color: "var(--color-text-base)" }}>
             Forgot password?
           </a>
           <a href="/signup" className="hover:underline" style={{ color: "var(--color-accent)" }}>

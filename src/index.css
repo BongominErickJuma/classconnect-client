@@ -64,3 +64,15 @@ button {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.animate-progress {
+  animation: progress 2s linear forwards;
+}
