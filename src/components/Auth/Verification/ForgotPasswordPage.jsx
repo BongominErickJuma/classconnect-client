@@ -20,11 +20,11 @@ const ForgotPasswordPage = () => {
     setError("");
 
     try {
-      // const response = await axios.post(
-      //   "https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/forgotPassword",
-      //   { email }
-      // );
-      const response = await axios.post("http://localhost:3000/api/v1/ecl/users/forgotPassword", { email });
+      const response = await axios.post(
+        "https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/forgotPassword",
+        { email }
+      );
+      // const response = await axios.post("http://localhost:3000/api/v1/ecl/users/forgotPassword", { email });
       setMessage(response.data.message);
       setSuccess(true);
     } catch (err) {

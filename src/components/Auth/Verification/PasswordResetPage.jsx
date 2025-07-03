@@ -38,13 +38,13 @@ const PasswordResetPage = () => {
     }
 
     try {
-      // await axios.patch(`https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/resetPassword/${token}`, {
-      //   password: formData.newPassword,
-      // });
-
-      await axios.patch(`http://localhost:3000/api/v1/ecl/users/resetPassword/${token}`, {
+      await axios.patch(`https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/resetPassword/${token}`, {
         password: formData.newPassword,
       });
+
+      // await axios.patch(`http://localhost:3000/api/v1/ecl/users/resetPassword/${token}`, {
+      //   password: formData.newPassword,
+      // });
 
       setSuccess(true);
       // Show success message for 2 seconds before redirecting

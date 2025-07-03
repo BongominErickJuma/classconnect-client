@@ -20,8 +20,8 @@ const EmailVerificationPage = () => {
       }
 
       try {
-        await axios.patch(`http://localhost:3000/api/v1/ecl/users/verify-email/${token}`);
-        // await axios.patch(`https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/verify-email/${token}`);
+        // await axios.patch(`http://localhost:3000/api/v1/ecl/users/verify-email/${token}`);
+        await axios.patch(`https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/verify-email/${token}`);
         setStatus("success");
         setMessage("Email verified successfully! Redirecting to dashboard...");
 

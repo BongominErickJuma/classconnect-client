@@ -2,8 +2,8 @@ import axios from "axios";
 
 // Create axios instance with base config
 const api = axios.create({
-  baseURL: "http://localhost:3000/api/v1/ecl",
-  // baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl",
+  // baseURL: "http://localhost:3000/api/v1/ecl",
+  baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
