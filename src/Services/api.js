@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Create axios instance with base config
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl ",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -15,7 +15,6 @@ api.interceptors.response.use(
   (error) => {
     // Standard error handling
     if (error.response) {
-      console.log(error);
       const message = error.response.data?.message || "An error occurred";
       return Promise.reject(new Error(message));
     } else if (error.request) {
