@@ -14,7 +14,7 @@ const DesktopHeader = ({ user, isProfileOpen, toggleProfile }) => {
         className="text-lg font-medium"
         style={{ color: "var(--color-text-base)", fontFamily: "var(--font-primary)" }}
       >
-        Welcome back, {user.name}
+        Welcome, {user.name}
       </h2>
       <div className="flex items-center space-x-6">
         <NotificationBell />

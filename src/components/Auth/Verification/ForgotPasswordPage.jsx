@@ -5,6 +5,7 @@ import axios from "axios";
 import Logo from "../../../svgs/Logo";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { authService } from "../../../Services/api";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
@@ -20,12 +21,8 @@ const ForgotPasswordPage = () => {
     setError("");
 
     try {
-      const response = await axios.post(
-        "https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/forgotPassword",
-        { email }
-      );
-      // const response = await axios.post("http://localhost:3000/api/v1/ecl/users/forgotPassword", { email });
-      setMessage(response.data.message);
+      const response = await authService.forgotPassword(email);
+      setMessage(response.message);
       setSuccess(true);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to send reset link");

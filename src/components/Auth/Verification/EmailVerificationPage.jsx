@@ -1,8 +1,8 @@
 // src/pages/EmailVerificationPage.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import Logo from "../../../svgs/Logo";
+import { authService } from "../../../Services/api";
 
 const EmailVerificationPage = () => {
   const [searchParams] = useSearchParams();
@@ -20,8 +20,7 @@ const EmailVerificationPage = () => {
       }
 
       try {
-        // await axios.patch(`http://localhost:3000/api/v1/ecl/users/verify-email/${token}`);
-        await axios.patch(`https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/verify-email/${token}`);
+        await authService.verifyEmail(token);
         setStatus("success");
         setMessage("Email verified successfully! Redirecting to dashboard...");
 

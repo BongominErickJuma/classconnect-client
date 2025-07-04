@@ -4,6 +4,7 @@ import Submissions from "./../Sections/Submissions/Submissions";
 import Courses from "./../Sections/Courses/Courses";
 import Students from "./../Sections/Students/Students";
 import Resources from "./../Sections/Resources/Resources";
+import ProfilePage from "../Sections/Profile/ProfilePage";
 
 const ContentArea = ({ activeItem, user }) => {
   const contentMap = {
@@ -13,6 +14,7 @@ const ContentArea = ({ activeItem, user }) => {
     Submissions: { component: <Submissions /> },
     Students: { component: <Students /> },
     Resources: { component: <Resources /> },
+    Settings: { component: <ProfilePage user={user} /> },
   };
 
   const content = contentMap[activeItem] || contentMap.Dashboard;

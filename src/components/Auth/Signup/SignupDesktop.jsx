@@ -20,10 +20,6 @@ const SignupDesktop = ({
       className="w-1/2 flex items-center justify-center p-8 bg-light-bg"
       style={{ backgroundColor: "var(--color-light-bg)" }}
     >
-      {/* <div
-      className="w-1/2 flex items-center justify-center p-8"
-      style={{ backgroundColor: "var(--color-light-bg)", minWidth: "400px" }}
-    > */}
       <img
         src="/images/img_desk.png"
         alt="Desktop App Logo"

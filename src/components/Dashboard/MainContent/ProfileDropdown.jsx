@@ -13,14 +13,6 @@ const ProfileDropdown = ({ user, isOpen, toggleDropdown }) => {
           className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 z-10 border"
           style={{ backgroundColor: "white", borderColor: "var(--color-light-bg)" }}
         >
-          <a href="#" className="block px-4 py-2 hover:opacity-90" style={{ color: "var(--color-text-base)" }}>
-            <FontAwesomeIcon icon={faUser} className="mr-2" />
-            Profile
-          </a>
-          <a href="#" className="block px-4 py-2 hover:opacity-90" style={{ color: "var(--color-text-base)" }}>
-            <FontAwesomeIcon icon={faCog} className="mr-2" />
-            Settings
-          </a>
           <a href="/login" className="block px-4 py-2 hover:opacity-90" style={{ color: "var(--color-text-base)" }}>
             <FontAwesomeIcon icon={faCog} className="mr-2" />
             Logout

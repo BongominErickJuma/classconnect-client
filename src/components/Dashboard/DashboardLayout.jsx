@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { faBook, faTasks, faEnvelope, faCog, faUser, faHome, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faTasks, faEnvelope, faCog, faHome, faGraduationCap, faGear } from "@fortawesome/free-solid-svg-icons";
 import MobileHeader from "./Header/MobileHeader";
 import DesktopHeader from "./Header/DesktopHeader";
 import MobileSidebar from "./Sidebar/MobileSidebar";
@@ -18,6 +18,7 @@ const DashboardLayout = ({ user }) => {
     { name: "Submissions", icon: faEnvelope },
     ...(user.role === "instructor" || user.role === "admin" ? [{ name: "Students", icon: faGraduationCap }] : []),
     { name: "Resources", icon: faCog },
+    { name: "Settings", icon: faGear },
   ];
 
   const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);

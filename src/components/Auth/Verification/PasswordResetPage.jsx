@@ -1,10 +1,10 @@
 // src/pages/PasswordResetPage.jsx
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import Logo from "../../../svgs/Logo";
 import { faLock, faKey, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { authService } from "../../../Services/api";
 
 const PasswordResetPage = () => {
   const [searchParams] = useSearchParams();
@@ -38,14 +38,7 @@ const PasswordResetPage = () => {
     }
 
     try {
-      await axios.patch(`https://classconnect-server-fxpq.onrender.com/api/v1/ecl/users/resetPassword/${token}`, {
-        password: formData.newPassword,
-      });
-
-      // await axios.patch(`http://localhost:3000/api/v1/ecl/users/resetPassword/${token}`, {
-      //   password: formData.newPassword,
-      // });
-
+      await authService.resetPassword(formData.newPassword, token);
       setSuccess(true);
       // Show success message for 2 seconds before redirecting
       setTimeout(() => {

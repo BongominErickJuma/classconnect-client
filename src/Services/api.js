@@ -26,11 +26,16 @@ api.interceptors.response.use(
   }
 );
 
+export function getImageUrl(relativePath) {
+  if (!relativePath) return ""; // fallback
+  // return `${`http://localhost:3000/`}${relativePath}`;
+  return `${`https://classconnect-server-fxpq.onrender.com/`}${relativePath}`;
+}
+
 // Auth Service
 export const authService = {
   login: async (credentials) => {
     const response = await api.post("/users/login", credentials);
-
     return response;
   },
   signup: async (userData) => {
@@ -41,9 +46,17 @@ export const authService = {
     return api.post("/users/logout");
   },
   getMe: async () => {
-    return api.get("/users/me");
+    const res = await api.get("/users/me");
+    return res;
   },
-  verifyEmail: async (userData) => {
-    return api.patch("/users/verify-email/:token", userData);
+  verifyEmail: async (token) => {
+    await api.patch(`/users/verify-email/${token}`);
+  },
+  forgotPassword: async (email) => {
+    const res = await api.post(`/users/forgotPassword`, { email });
+    return res;
+  },
+  resetPassword: async (password, token) => {
+    await api.patch(`/users/resetPassword/${token}`, { password });
   },
 };
