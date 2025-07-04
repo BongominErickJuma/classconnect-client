@@ -4,7 +4,6 @@ const ProfileHeader = ({ profileImage, name, handleImageUpload, email }) => {
   const letter1 = name.split(" ")[0].charAt(0);
   const letter2 = name.split(" ")[1].charAt(0);
   const letters = `${letter1} ${letter2}`;
-  console.log(profileImage);
   return (
     <div className="p-6 text-white relative">
       <div className="flex justify-between items-start">
