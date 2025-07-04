@@ -5,9 +5,19 @@ import InputField from "./InputField";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
 const LoginDesktop = ({ formData, handleChange, handleSubmit, isLoading, error }) => (
-  <div className="hidden md:flex w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
-    <div className="w-1/2 flex items-center justify-center p-8" style={{ backgroundColor: "var(--color-light-bg)" }}>
-      <img src="/images/img_desk.png" alt="Desktop App Logo" className="w-full max-w-xs object-contain" />
+  <div className="hidden md:flex w-full max-w-4xl bg-white rounded-lg shadow-lg">
+    <div
+      className="w-1/2 flex items-center justify-center p-8 bg-light-bg"
+      style={{ backgroundColor: "var(--color-light-bg)" }}
+    >
+      <img
+        src="/images/img_desk.png"
+        alt="Desktop App Logo"
+        className="w-full max-w-xs object-contain"
+        width={320}
+        height={320}
+        style={{ minWidth: "280px" }}
+      />
     </div>
     <div className="w-1/2 p-8">
       <div className="mb-6 flex flex-col items-center">

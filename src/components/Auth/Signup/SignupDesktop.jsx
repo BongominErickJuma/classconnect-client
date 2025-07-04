@@ -16,8 +16,22 @@ const SignupDesktop = ({
   setStep,
 }) => (
   <div className="hidden md:flex w-full max-w-4xl bg-white rounded-lg shadow-lg">
-    <div className="w-1/2 flex items-center justify-center p-8 bg-light-bg">
-      <img src="/images/img_desk.png" alt="App Logo" className="max-w-xs" />
+    <div
+      className="w-1/2 flex items-center justify-center p-8 bg-light-bg"
+      style={{ backgroundColor: "var(--color-light-bg)" }}
+    >
+      {/* <div
+      className="w-1/2 flex items-center justify-center p-8"
+      style={{ backgroundColor: "var(--color-light-bg)", minWidth: "400px" }}
+    > */}
+      <img
+        src="/images/img_desk.png"
+        alt="Desktop App Logo"
+        className="w-full max-w-xs object-contain"
+        width={320}
+        height={320}
+        style={{ minWidth: "280px" }}
+      />
     </div>
     <div className="w-1/2 p-8">
       <div className="flex flex-col items-center mb-6">
