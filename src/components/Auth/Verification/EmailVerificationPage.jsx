@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Logo from "../../../svgs/Logo";
-import { authService } from "../../../Services/api";
+import { authService, getImageUrl, userService } from "../../../Services/api";
+import useCurrentUser from "../../Hooks/useCurrentUser";
 
 const EmailVerificationPage = () => {
   const [searchParams] = useSearchParams();
@@ -10,6 +11,7 @@ const EmailVerificationPage = () => {
   const [status, setStatus] = useState("verifying");
   const [message, setMessage] = useState("");
   const token = searchParams.get("token");
+  const { setUser } = useCurrentUser();
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -23,6 +25,11 @@ const EmailVerificationPage = () => {
         await authService.verifyEmail(token);
         setStatus("success");
         setMessage("Email verified successfully! Redirecting to dashboard...");
+
+        const fetchedUser = await userService.getMe();
+        const currentUser = fetchedUser.data.user;
+        currentUser.profile_photo = getImageUrl(currentUser.profile_photo);
+        setUser(currentUser); // Update context
 
         // Automatically redirect to dashboard after 3 seconds
         setTimeout(() => {

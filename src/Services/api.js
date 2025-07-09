@@ -35,8 +35,8 @@ export function getImageUrl(relativePath) {
 // Auth Service
 export const authService = {
   login: async (credentials) => {
-    const response = await api.post("/users/login", credentials);
-    return response;
+    const login = await api.post("/users/login", credentials);
+    return login;
   },
   signup: async (userData) => {
     return api.post("/users/signup", userData);
@@ -44,10 +44,6 @@ export const authService = {
   logout: async () => {
     // Server should clear the ecl_Jwt cookie
     return api.post("/users/logout");
-  },
-  getMe: async () => {
-    const res = await api.get("/users/me");
-    return res;
   },
   verifyEmail: async (token) => {
     await api.patch(`/users/verify-email/${token}`);
@@ -58,5 +54,184 @@ export const authService = {
   },
   resetPassword: async (password, token) => {
     await api.patch(`/users/resetPassword/${token}`, { password });
+  },
+};
+
+// User Service
+
+export const userService = {
+  getMe: async () => {
+    const res = await api.get("/users/me");
+    return res;
+  },
+  updateMe: async (formData) => {
+    return await api.patch("/users/updateMe", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  updatePassword: async (data) => {
+    return await api.patch("/users/updatePassword", data);
+  },
+  deleteMe: async () => {
+    return await api.delete("/users/deleteMe");
+  },
+  getUser: async (id) => {
+    return await api.get(`/users/${id}`);
+  },
+  updateUserRole: async (id, data) => {
+    return await api.patch(`/users/${id}`, data);
+  },
+
+  deleteUser: async (id) => {
+    return await api.delete(`/users/${id}`);
+  },
+
+  getAllUsers: async () => {
+    return await api.get(`/users`);
+  },
+
+  getInstructors: async () => {
+    const instructors = await api.get(`/users?role=instructor`);
+    const admins = await api.get(`/users?role=admin`);
+
+    const res = [...instructors.data, ...admins.data];
+    return res;
+  },
+};
+
+// Course Servics
+
+export const courseService = {
+  getAllCourses: async () => {
+    return await api.get("/courses");
+  },
+
+  getInstructorCourses: async (instructor_id) => {
+    return await api.get(`/courses?instructor_id=${instructor_id}`);
+  },
+
+  getCourse: async (id) => {
+    return await api.get(`/courses/${id}`);
+  },
+
+  getEnrolledCourses: async (ids) => {
+    return await api.get(`courses/enrolled-courses/${ids}`);
+  },
+
+  updateCourse: async (id, data) => {
+    return await api.patch(`/courses/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+};
+
+// Assignment Servics
+
+export const assignmentService = {
+  getAllAssignments: async (params) => {
+    return await api.get(`/courses/assignments?${params}`);
+  },
+
+  getAssignment: async (id) => {
+    return await api.get(`/courses/assignments/${id}`);
+  },
+
+  // /api/v1/ecl/courses/f4f9bc93-015c-4535-b750-99a906e16d08/assignments
+  createAssignments: async (id, data) => {
+    return await api.post(`/courses/${id}/assignments`, data);
+  },
+
+  UpdateAssignments: async (id, data) => {
+    return await api.patch(`/courses/assignments/${id}`, data);
+  },
+
+  deleteAssignment: async (id) => {
+    await api.delete(`/courses/assignments/delete-permanently/${id}`);
+  },
+};
+
+// Submissions services
+
+export const submissionService = {
+  getAllSubmissions: async (params) => {
+    return await api.get(`/courses/assignments/submissions?${params}`);
+  },
+
+  getSubmission: async (id) => {
+    return await api.get(`/courses/assignments/submissions/${id}`);
+  },
+
+  getMySubmissions: async (id, user_id) => {
+    return await api.get(`/courses/assignments/submissions?student_id=${user_id}&assignment_id=${id}`);
+  },
+};
+
+// Resource services
+
+export const resourcesService = {
+  getAllresources: async (params) => {
+    return await api.get(`/courses/resources?${params}`);
+  },
+
+  getResource: async (id) => {
+    return await api.get(`/courses/resources/${id}`);
+  },
+
+  createResourse: async (id, formData) => {
+    return await api.post(`/courses/${id}/resources`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  updateResource: async (id, formData) => {
+    return await api.patch(`/courses/resources/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  deleteResource: async (id) => {
+    await api.delete(`/courses/resources/delete-permanently/${id}`);
+  },
+};
+
+// Reviews Service
+
+export const reviewService = {
+  getReview: async (params) => {
+    return await api.get(`/courses/ratings?${params}`);
+  },
+};
+
+export const enrollmentService = {
+  getEnrollments: async (student_id) => {
+    return await api.get(`courses/enrollments?student_id=${student_id}`);
+  },
+
+  getCourseTotalEntollments: async (id) => {
+    return await api.get(`courses/enrollments?course_id=${id}`);
+  },
+
+  createEnrollment: async (course_id, student_id) => {
+    return await api.post(`/courses/${course_id}/enrollments`, { student_id });
+  },
+
+  deleteMyEnrollment: async (id) => {
+    // id is enrollment id
+    await api.delete(`/courses/enrollments/delete-permanently/${id}`);
+  },
+};
+
+export const gradeServie = {
+  getALlGrades: async () => {
+    await axios.get("");
   },
 };

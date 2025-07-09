@@ -1,10 +1,10 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
 import NotificationBell from "../MainContent/NotificationBell";
 import ProfileDropdown from "../MainContent/ProfileDropdown";
+import useCurrentUser from "../../Hooks/useCurrentUser";
 
-const DesktopHeader = ({ user, isProfileOpen, toggleProfile }) => {
+const DesktopHeader = ({ isProfileOpen, toggleProfile }) => {
+  const { user } = useCurrentUser();
   return (
     <header
       className="hidden md:flex shadow-sm h-16 items-center justify-between px-6 w-full rounded-tr-2xl"
@@ -18,7 +18,7 @@ const DesktopHeader = ({ user, isProfileOpen, toggleProfile }) => {
       </h2>
       <div className="flex items-center space-x-6">
         <NotificationBell />
-        <ProfileDropdown user={user} isOpen={isProfileOpen} toggleDropdown={toggleProfile} />
+        <ProfileDropdown isOpen={isProfileOpen} toggleDropdown={toggleProfile} />
       </div>
     </header>
   );

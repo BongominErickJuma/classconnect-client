@@ -1,9 +1,10 @@
 // src/components/auth/Login/LoginPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService } from "../../../Services/api";
+import { authService, getImageUrl, userService } from "../../../Services/api";
 
 import LoginForm from "./LoginForm";
+import useCurrentUser from "../../Hooks/useCurrentUser";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const LoginPage = () => {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { setUser } = useCurrentUser();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +31,12 @@ const LoginPage = () => {
 
     try {
       await authService.login(formData);
+
+      const fetchedUser = await userService.getMe();
+      const currentUser = fetchedUser.data.user;
+      currentUser.profile_photo = getImageUrl(currentUser.profile_photo);
+      setUser(currentUser); // Update context
+
       navigate("/dashboard");
     } catch (err) {
       setError(err.message || "Login failed. Please try again.");

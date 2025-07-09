@@ -4,7 +4,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Logo from "../../../svgs/Logo";
 import { faLock, faKey, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { authService } from "../../../Services/api";
+import { authService, getImageUrl, userService } from "../../../Services/api";
+import useCurrentUser from "../../Hooks/useCurrentUser";
 
 const PasswordResetPage = () => {
   const [searchParams] = useSearchParams();
@@ -12,6 +13,7 @@ const PasswordResetPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const { setUser } = useCurrentUser();
 
   const [formData, setFormData] = useState({
     newPassword: "",
@@ -40,6 +42,12 @@ const PasswordResetPage = () => {
     try {
       await authService.resetPassword(formData.newPassword, token);
       setSuccess(true);
+
+      const fetchedUser = await userService.getMe();
+      const currentUser = fetchedUser.data.user;
+      currentUser.profile_photo = getImageUrl(currentUser.profile_photo);
+      setUser(currentUser); // Update context
+
       // Show success message for 2 seconds before redirecting
       setTimeout(() => {
         navigate("/dashboard");

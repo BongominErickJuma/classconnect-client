@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import { faBook, faTasks, faEnvelope, faCog, faHome, faGraduationCap, faGear } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faHome, faGraduationCap, faGear, faStar, faUsers } from "@fortawesome/free-solid-svg-icons";
 import MobileHeader from "./Header/MobileHeader";
 import DesktopHeader from "./Header/DesktopHeader";
 import MobileSidebar from "./Sidebar/MobileSidebar";
 import DesktopSidebar from "./Sidebar/DesktopSidebar";
-import ContentArea from "./MainContent/ContentArea";
+import useCurrentUser from "../Hooks/useCurrentUser";
 
-const DashboardLayout = ({ user }) => {
+const DashboardLayout = ({ children }) => {
+  const { user } = useCurrentUser();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Dashboard");
 
   const navItems = [
     { name: "Dashboard", icon: faHome },
-    { name: "Courses", icon: faBook },
-    { name: "Assignments", icon: faTasks },
-    { name: "Submissions", icon: faEnvelope },
-    ...(user.role === "instructor" || user.role === "admin" ? [{ name: "Students", icon: faGraduationCap }] : []),
-    { name: "Resources", icon: faCog },
+    { name: "Featured", icon: faStar },
+    { name: "My Courses", icon: faBook },
+    ...(user.role === "instructor" || user.role === "admin" ? [{ name: "Users", icon: faUsers }] : []),
+    ...(user.role === "student" ? [{ name: "Instructors", icon: faGraduationCap }] : []),
     { name: "Settings", icon: faGear },
   ];
 
@@ -30,7 +30,7 @@ const DashboardLayout = ({ user }) => {
       style={{ backgroundColor: "var(--color-primary-bg)" }}
     >
       {/* Mobile Components */}
-      <MobileHeader isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} user={user} />
+      <MobileHeader isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
       <MobileSidebar
         isOpen={isMobileMenuOpen}
         navItems={navItems}
@@ -45,10 +45,8 @@ const DashboardLayout = ({ user }) => {
 
       {/* Main Content */}
       <main className="flex-1 w-full flex flex-col " style={{ backgroundColor: "var(--color-light-bg)" }}>
-        <DesktopHeader user={user} isProfileOpen={isProfileOpen} toggleProfile={toggleProfile} />
-        <div className="flex-1 p-4 overflow-y-auto custom-scroll">
-          <ContentArea activeItem={activeItem} user={user} />
-        </div>
+        <DesktopHeader isProfileOpen={isProfileOpen} toggleProfile={toggleProfile} />
+        <div className="flex-1 p-4 overflow-y-auto custom-scroll">{children}</div>
       </main>
     </div>
   );

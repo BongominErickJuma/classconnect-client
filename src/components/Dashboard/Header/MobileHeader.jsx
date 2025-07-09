@@ -2,8 +2,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes, faBell } from "@fortawesome/free-solid-svg-icons";
 import NotificationBell from "../MainContent/NotificationBell";
+import useCurrentUser from "../../Hooks/useCurrentUser";
 
-const MobileHeader = ({ isMobileMenuOpen, toggleMobileMenu, user }) => {
+const MobileHeader = ({ isMobileMenuOpen, toggleMobileMenu }) => {
+  const { user } = useCurrentUser();
   return (
     <header
       className="md:hidden p-4 flex justify-between items-center w-full"

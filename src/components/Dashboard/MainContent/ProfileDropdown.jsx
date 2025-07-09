@@ -1,8 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faCog } from "@fortawesome/free-solid-svg-icons";
+import useCurrentUser from "../../Hooks/useCurrentUser";
 
-const ProfileDropdown = ({ user, isOpen, toggleDropdown }) => {
+const ProfileDropdown = ({ isOpen, toggleDropdown }) => {
+  const { user } = useCurrentUser();
   return (
     <div className="relative">
       <button onClick={toggleDropdown} className="focus:outline-none profile-btn">

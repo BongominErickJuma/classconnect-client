@@ -5,9 +5,15 @@ import "./index.css";
 
 import "@fontsource/jost";
 import "@fontsource/roboto";
+import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from "./components/Contexts/UserProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </BrowserRouter>
   </StrictMode>
 );

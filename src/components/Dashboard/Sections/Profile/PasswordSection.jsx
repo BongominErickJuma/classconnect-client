@@ -19,6 +19,7 @@ const PasswordSection = ({
             <input
               type="password"
               value={currentPassword}
+              placeholder="********"
               onChange={(e) => setCurrentPassword(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e8ea8]"
               required
@@ -29,6 +30,7 @@ const PasswordSection = ({
             <input
               type="password"
               value={newPassword}
+              placeholder="********"
               onChange={(e) => setNewPassword(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e8ea8]"
               required
@@ -39,6 +41,7 @@ const PasswordSection = ({
             <input
               type="password"
               value={confirmPassword}
+              placeholder="********"
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4e8ea8]"
               required

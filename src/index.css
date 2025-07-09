@@ -39,12 +39,21 @@ textarea:focus {
   outline: none;
   border: 1px solid var(--color-accent);
 }
+.navLink,
 button {
   cursor: pointer;
   font-family: var(--font-primary);
   background-color: var(--color-accent);
+  color: white;
 }
 
+.btnDelete {
+  background-color: var(--color-alert);
+}
+.btn-active {
+  color: white;
+  background-color: var(--color-text-base);
+}
 .profile-btn {
   background-color: transparent;
 }
