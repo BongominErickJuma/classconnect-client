@@ -129,7 +129,7 @@ const Users = () => {
   }
 
   return (
-    <div className="p-6 min-h-screen flex flex-col justify-between">
+    <div className="p-6 flex flex-col justify-between">
       {/* Header and Search */}
       <Head
         currentPage={currentPage}
