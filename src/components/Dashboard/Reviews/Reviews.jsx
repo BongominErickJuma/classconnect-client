@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useCurrentUser from "../../Hooks/useCurrentUser";
+import { reviewService } from "../../../Services/api";
 
 const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
   const { user } = useCurrentUser();
@@ -9,47 +10,61 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
   const [views, setViews] = useState("View All");
   const [editingReview, setEditingReview] = useState(null);
   const [newReview, setNewReview] = useState({ rating: 0, review: "" });
+  const { id } = useParams();
 
   const handleToggles = () => {
     setCount((prev) => (prev === 5 ? 100 : 5));
     setViews((prev) => (prev === "View All" ? "View Less" : "View All"));
   };
 
-  const isPrivileged = (user?.role === "student" && isEnrolled === true) || user?.role === "admin";
+  const isPrivileged = user?.role === "student" && isEnrolled === true;
 
   const handleEdit = (rev) => {
     setEditingReview(rev);
     setNewReview({ rating: rev.rating, review: rev.review });
   };
 
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this review?");
-    if (confirmDelete) {
-      setReviews(reviews.filter((r) => r.rating_id !== id));
-      // 🔁 Optionally send DELETE to API here
+  const handleDelete = async (id) => {
+    try {
+      await reviewService.deleteReview(id);
+
+      setTimeout(() => {
+        setReviews(reviews.filter((r) => r.rating_id !== id));
+      }, 1000);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (editingReview) {
       // Edit mode
-      const updated = reviews.map((r) =>
-        r.rating_id === editingReview.rating_id ? { ...r, rating: newReview.rating, review: newReview.review } : r
-      );
-      setReviews(updated);
+      editingReview.rating = newReview.rating;
+      editingReview.review = newReview.review;
+
+      try {
+        await reviewService.updeteReview(editingReview, editingReview.rating_id);
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       // Add mode
       const newRating = {
-        rating_id: crypto.randomUUID(),
-        student_id: user.id,
-        course_id: "dummy-course-id", // replace if needed
+        student_id: user.user_id,
         rating: newReview.rating,
         review: newReview.review,
-        rated_at: new Date().toISOString(),
-        created_at: new Date().toISOString(),
-        is_deleted: false,
       };
-      setReviews([newRating, ...reviews]);
+
+      try {
+        const res = await reviewService.createReview(id, newRating);
+
+        if (res.data) {
+          const newReview = res.data;
+          setReviews([newReview, ...reviews]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     setNewReview({ rating: 0, review: "" });
@@ -83,7 +98,7 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
             value={newReview.review}
             onChange={(e) => setNewReview({ ...newReview, review: e.target.value })}
             className="w-full border rounded p-2 mb-2 text-sm"
-            placeholder="Write your thoughts..."
+            placeholder="Write your thoughts.... Click the stars above for ratings.You can not add more than one review"
           ></textarea>
           <button onClick={handleSubmit} className="px-4 py-1 text-white bg-[var(--color-accent)] rounded text-sm">
             {editingReview ? "Update" : "Submit"}
@@ -108,12 +123,12 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
             <p className="text-gray-500 text-sm mb-1">{new Date(rev.rated_at).toLocaleDateString()}</p>
             <p className="text-gray-700">{rev.review || "No comment"}</p>
 
-            {user?.id === rev.student_id && isPrivileged && (
+            {user?.user_id === rev.student_id && isPrivileged && (
               <div className="mt-2 space-x-3 text-sm">
-                <button onClick={() => handleEdit(rev)} className="text-blue-600 hover:underline">
+                <button onClick={() => handleEdit(rev)} className="px-2 rounded-xl w-14">
                   Edit
                 </button>
-                <button onClick={() => handleDelete(rev.rating_id)} className="text-red-500 hover:underline">
+                <button onClick={() => handleDelete(rev.rating_id)} className=" px-2 rounded-xl w-14">
                   Delete
                 </button>
               </div>

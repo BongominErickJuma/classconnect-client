@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 import { getImageUrl, userService } from "../../Services/api"; // Ensure userService is exported from this file
-import { useNavigate } from "react-router-dom";
 
 // 1. Create the context
 const UserContext = createContext();

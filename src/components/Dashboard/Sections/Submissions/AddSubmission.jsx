@@ -1,10 +1,10 @@
 import React from "react";
 
-const AddSubmission = ({ newSubmission, setNewSubmission, handleAddSubmission }) => {
+const AddSubmission = ({ newSubmission, setNewSubmission, handleAddSubmission, isPending }) => {
   return (
     <div className="mb-4 p-4 border rounded bg-[var(--color-light-bg)]">
       <input
-        type="text"
+        type="file"
         placeholder="Submission file path"
         className="border px-2 py-1 mr-2 text-sm rounded w-1/3"
         value={newSubmission.submitted_file}
@@ -16,10 +16,9 @@ const AddSubmission = ({ newSubmission, setNewSubmission, handleAddSubmission })
         onChange={(e) => setNewSubmission({ ...newSubmission, status: e.target.value })}
       >
         <option>Submitted</option>
-        <option>Late</option>
       </select>
       <button onClick={handleAddSubmission} className="bg-green-600 text-white px-3 py-1 rounded text-sm">
-        Submit
+        {isPending ? "Submitting" : "Submit"}
       </button>
     </div>
   );

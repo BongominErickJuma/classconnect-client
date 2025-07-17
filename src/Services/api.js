@@ -2,8 +2,8 @@ import axios from "axios";
 
 // Create axios instance with base config
 const api = axios.create({
-  // baseURL: "http://localhost:3000/api/v1/ecl",
-  baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl",
+  baseURL: "http://localhost:3000/api/v1/ecl",
+  // baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -28,8 +28,8 @@ api.interceptors.response.use(
 
 export function getImageUrl(relativePath) {
   if (!relativePath) return ""; // fallback
-  // return `${`http://localhost:3000`}${relativePath}`;
-  return `${`https://classconnect-server-fxpq.onrender.com`}${relativePath}`;
+  return `${`http://localhost:3000`}${relativePath}`;
+  // return `${`https://classconnect-server-fxpq.onrender.com`}${relativePath}`;
 }
 
 // Auth Service
@@ -43,7 +43,7 @@ export const authService = {
   },
   logout: async () => {
     // Server should clear the ecl_Jwt cookie
-    return api.post("/users/logout");
+    return api.get("/users/logout");
   },
   verifyEmail: async (token) => {
     await api.patch(`/users/verify-email/${token}`);
@@ -169,6 +169,10 @@ export const submissionService = {
   getMySubmissions: async (id, user_id) => {
     return await api.get(`/courses/assignments/submissions?student_id=${user_id}&assignment_id=${id}`);
   },
+
+  createSubmissions: async (id, file) => {
+    return await api.post(`/courses/assignments/${id}/submissions`, file);
+  },
 };
 
 // Resource services
@@ -208,6 +212,17 @@ export const resourcesService = {
 export const reviewService = {
   getReview: async (params) => {
     return await api.get(`/courses/ratings?${params}`);
+  },
+  createReview: async (course_id, reviewData) => {
+    return await api.post(`/courses/${course_id}/ratings`, reviewData);
+  },
+
+  updeteReview: async (reviewData, review_id) => {
+    return await api.patch(`/courses/ratings/${review_id}`, reviewData);
+  },
+
+  deleteReview: async (review_id) => {
+    return await api.delete(`/courses/ratings/${review_id}`);
   },
 };
 

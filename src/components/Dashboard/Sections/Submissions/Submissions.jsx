@@ -4,6 +4,8 @@ import SubmissionHeader from "./SubmissionHeader";
 import AddSubmission from "./AddSubmission";
 import SubmissionTable from "./SubmissionTable";
 import GradingSubmission from "./GradingSubmission";
+import { useParams } from "react-router-dom";
+import { submissionService } from "../../../../Services/api";
 
 const Submissions = ({ submissions: initialSubmissions }) => {
   const [submissions, setSubmissions] = useState(initialSubmissions || []);
@@ -15,8 +17,12 @@ const Submissions = ({ submissions: initialSubmissions }) => {
     submitted_file: "",
     status: "Submitted",
   });
+  const [isPending, setIsPending] = useState(false);
 
-  console.log(initialSubmissions);
+  const { id } = useParams();
+  const { user } = useCurrentUser();
+
+  const [showAddButton, setShowAddButton] = useState(user?.role === "student" && initialSubmissions.length === 0);
 
   const getFileIcon = (filename) => {
     const extension = filename.split(".").pop().toLowerCase();
@@ -74,20 +80,27 @@ const Submissions = ({ submissions: initialSubmissions }) => {
     setSubmissions(submissions.filter((s) => s.submission_id !== id));
   };
 
-  const handleAddSubmission = () => {
-    const id = crypto.randomUUID();
+  const handleAddSubmission = async () => {
+    setIsPending(true);
     const newSub = {
       ...newSubmission,
-      submission_id: id,
-      assignment_id: "dummy-assignment",
-      student_id: "dummy-student",
-      submitted_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      is_deleted: false,
+      student_id: user.user_id,
     };
-    setSubmissions([newSub, ...submissions]);
-    setNewSubmission({ submitted_file: "", status: "Submitted" });
-    setShowAddForm(false);
+
+    try {
+      const res = await submissionService.createSubmissions(id, newSub);
+      if (res) {
+        const resSub = res.data;
+        setSubmissions([resSub, ...submissions]);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsPending(false);
+      setNewSubmission({ submitted_file: "", status: "Submitted" });
+      setShowAddForm(false);
+      setShowAddButton(false);
+    }
   };
 
   return (
@@ -97,6 +110,7 @@ const Submissions = ({ submissions: initialSubmissions }) => {
         setFilterStatus={setFilterStatus}
         setShowAddForm={setShowAddForm}
         showAddForm={showAddForm}
+        showAddButton={showAddButton}
       />
 
       {showAddForm && (
@@ -104,6 +118,7 @@ const Submissions = ({ submissions: initialSubmissions }) => {
           newSubmission={newSubmission}
           setNewSubmission={setNewSubmission}
           handleAddSubmission={handleAddSubmission}
+          isPending={isPending}
         />
       )}
 
