@@ -250,3 +250,32 @@ export const gradeServie = {
     await axios.get("");
   },
 };
+
+// dashboard statistics
+
+export const statisticsService = {
+  getStudentRecentGrades: async () => {
+    return await api.get("/stats/student-recent-grades");
+  },
+  getInstructorRecentReviews: async () => {
+    return await api.get("/stats/instructor-recent-reviews");
+  },
+  getStudentRecentActivities: async () => {
+    return await api.get("/stats/student-recent-activities");
+  },
+  getInstructorRecentActivities: async () => {
+    return await api.get("/stats/instructor-recent-activities");
+  },
+  getStudentUpcomingDeadlines: async () => {
+    return await api.get("/stats/student-upcoming-deadlines");
+  },
+  getInstructorUpcomingDeadlines: async () => {
+    return await api.get("/stats/instructor-upcoming-deadlines");
+  },
+  getStudentDashboardMetrics: async () => {
+    return await api.get("/stats/student-dashboard-metrics");
+  },
+  getInstructorDashboardMetrics: async () => {
+    return await api.get("/stats/instructor-dashboard-metrics");
+  },
+};

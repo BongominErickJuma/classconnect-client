@@ -16,7 +16,7 @@ const NavItem = ({ item, isActive, onClick }) => {
   return (
     <button
       className={`flex items-center p-4 w-full text-left ${isActive ? "opacity-90" : "hover:opacity-90"}`}
-      style={{ backgroundColor: isActive ? "rgba(0,0,0,0.1)" : "transparent" }}
+      style={{ backgroundColor: isActive ? "rgba(0,0,0,0.2)" : "transparent" }}
       onClick={handleClick}
     >
       <FontAwesomeIcon icon={item.icon} className="mr-3" />

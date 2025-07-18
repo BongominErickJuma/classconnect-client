@@ -2,61 +2,113 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBook,
-  faTasks,
-  faBookOpen,
-  faChartLine,
+  faClipboardList,
+  faUserGraduate,
+  faHourglassHalf,
   faBell,
   faClock,
-  faBullhorn,
+  faFileAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { getImageUrl, statisticsService } from "../../../../../Services/api";
 
-const StudentsWidgets = ({ user }) => {
+const StudentsWidgets = () => {
   const [stats, setStats] = useState({
-    courses: 0,
-    upcomingAssignments: 0,
-    avgGrade: 0,
-    newResources: 0,
+    totalCourses: 0,
+    enrolledCourses: 0,
+    studentsReached: 0,
+    pendingGrades: 0,
   });
 
   const [activities, setActivities] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
-  const [announcements, setAnnouncements] = useState([]);
+  const [recentGradings, setRecentGradings] = useState([]);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // Mock summary stats
-    setStats({
-      courses: 3,
-      upcomingAssignments: 2,
-      avgGrade: 87.5,
-      newResources: 4,
-    });
+    const fetchStats = async () => {
+      setIsPending(true);
+      try {
+        const dashbboardRes = await statisticsService.getStudentDashboardMetrics();
+        setStats({
+          totalCourses: dashbboardRes.data.total_courses,
+          enrolledCourses: dashbboardRes.data.enrolled_courses,
+          studentsReached: dashbboardRes.data.students_reached,
+          pendingGrades: dashbboardRes.data.pending_grades,
+        });
 
-    // Mock recent activity
-    setActivities([
-      "Submitted Assignment 1 for Logic Design",
-      "Joined course: Embedded Systems",
-      "Received feedback on Signals Lab Report",
-    ]);
+        const recentActivitiesRes = await statisticsService.getStudentRecentActivities();
+        setActivities(
+          recentActivitiesRes.data.map((activity) => {
+            if (activity.type === "rating") {
+              return `Rated course: ${activity.reference}`;
+            } else if (activity.type === "enrollment") {
+              return `Enrolled in : ${activity.reference}`;
+            } else if (activity.type === "submission") {
+              return `Submitted: ${activity.reference}`;
+            } else {
+              return activity.reference;
+            }
+          })
+        );
 
-    // Mock upcoming assignments
-    setUpcoming([
-      { title: "Assignment 2 - Flip Flops", due: "July 3, 2025" },
-      { title: "Final Project Proposal", due: "July 7, 2025" },
-    ]);
+        const upcomingDeadLinesRes = await statisticsService.getStudentUpcomingDeadlines();
+        setUpcoming(
+          upcomingDeadLinesRes.data.map((item) => ({
+            title: item.title,
+            due: new Date(item.due_date).toLocaleDateString(),
+            course: item.course_title,
+          }))
+        );
 
-    // Mock announcements
-    setAnnouncements([
-      "📢 Midterm exams start on July 10. Check your schedule!",
-      "New resources added for Computer Networks",
-    ]);
+        const recentGradingsRes = await statisticsService.getStudentRecentGrades();
+        setRecentGradings(
+          recentGradingsRes.data.map((grade) => ({
+            instructor: grade.name,
+            photo: grade.profile_photo,
+            score: `${grade.score}%`,
+            remark: grade.feedback,
+            subject: grade.title,
+          }))
+        );
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsPending(false);
+      }
+    };
+
+    fetchStats();
   }, []);
 
   const cards = [
-    { title: "Courses Enrolled", value: stats.courses, icon: faBook, color: "text-blue-500" },
-    { title: "Upcoming Assignments", value: stats.upcomingAssignments, icon: faTasks, color: "text-yellow-500" },
-    { title: "Average Grade", value: `${stats.avgGrade}%`, icon: faChartLine, color: "text-green-500" },
-    { title: "New Resources", value: stats.newResources, icon: faBookOpen, color: "text-red-500" },
+    { title: "Total Courses", value: stats.totalCourses, icon: faBook, color: "text-blue-500" },
+    { title: "Courses Enrolled in", value: stats.enrolledCourses, icon: faClipboardList, color: "text-yellow-500" },
+    { title: "Students Reached", value: stats.studentsReached, icon: faUserGraduate, color: "text-green-500" },
+    { title: "Pending Grades", value: stats.pendingGrades, icon: faHourglassHalf, color: "text-red-500" },
   ];
+
+  if (isPending) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">Courses</h1>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">Courses</h1>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          Error loading courses: {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -85,18 +137,33 @@ const StudentsWidgets = ({ user }) => {
                 <li key={idx}>
                   <span className="font-medium">{task.title}</span> —{" "}
                   <span className="text-red-500">by {task.due}</span>
+                  <span className="block text-xs text-gray-500">{task.course}</span>
                 </li>
               ))}
             </ul>
           </Section>
         </div>
 
-        {/* Right Column (Announcements) */}
+        {/* Right Column (Recent gradings) */}
         <div className="flex-1">
-          <Section title="Announcements" icon={faBullhorn}>
-            <ul className="text-sm text-gray-700 list-disc ml-6">
-              {announcements.map((a, idx) => (
-                <li key={idx}>{a}</li>
+          <Section title="Recent gradings" icon={faFileAlt}>
+            <ul className="space-y-4">
+              {recentGradings.map((grade, idx) => (
+                <li key={idx} className="flex items-start space-x-4">
+                  <img
+                    src={getImageUrl(grade.photo)}
+                    alt={grade.instructor}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div className="space-y-1">
+                    <p className="text-gray-800 font-semibold flex items-center gap-2">{grade.instructor}</p>
+                    <p className="text-sm text-gray-700 flex items-center gap-2">
+                      Score: <span className="font-medium">{grade.score}</span>
+                    </p>
+                    <p className="text-sm text-gray-600 flex items-center gap-2">{grade.remark}</p>
+                    <p className="text-xs text-gray-500 italic flex items-center gap-2">{grade.subject}</p>
+                  </div>
+                </li>
               ))}
             </ul>
           </Section>
@@ -108,12 +175,12 @@ const StudentsWidgets = ({ user }) => {
 
 const Card = ({ title, value, icon, color }) => (
   <div className="bg-white shadow-md rounded-xl p-4 flex items-center space-x-3">
-    <div className={`text-sm ${color}`}>
+    <div className={`text-2xl ${color}`}>
       <FontAwesomeIcon icon={icon} />
     </div>
     <div>
+      <p className="text-4xl font-bold text-gray-900">{value}</p>
       <h4 className="text-sm text-gray-500">{title}</h4>
-      <p className="text-lg font-bold text-gray-900">{value}</p>
     </div>
   </div>
 );

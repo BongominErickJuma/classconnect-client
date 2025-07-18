@@ -7,62 +7,83 @@ import {
   faBookOpen,
   faBell,
   faClock,
-  faBullhorn,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import { getImageUrl, statisticsService } from "../../../../../Services/api";
 
-const InstructorWidgets = ({ user }) => {
+const InstructorWidgets = () => {
   const [stats, setStats] = useState({
-    coursesCreated: 0,
-    assignmentsDue: 0,
+    totalCourses: 0,
+    myCourses: 0,
     studentsReached: 0,
-    newResources: 0,
+    totalReviews: 0,
   });
 
   const [activities, setActivities] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
-  const [announcements, setAnnouncements] = useState([]);
+  const [recentReviews, setRecentReviews] = useState([]);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // Mock summary stats
-    setStats({
-      coursesCreated: 4,
-      assignmentsDue: 3,
-      studentsReached: 78,
-      newResources: 2,
-    });
+    const fetchStats = async () => {
+      setIsPending(true);
+      try {
+        const dashbboardRes = await statisticsService.getInstructorDashboardMetrics();
+        setStats({
+          totalCourses: dashbboardRes.data.total_courses,
+          myCourses: dashbboardRes.data.my_courses,
+          studentsReached: dashbboardRes.data.students_reached,
+          totalReviews: dashbboardRes.data.total_reviews,
+        });
 
-    // Mock recent activity
-    setActivities([
-      "Created new assignment: OS Lab Report",
-      "Graded Assignment 2 for AI",
-      "Uploaded new video for Digital Logic",
-    ]);
+        const recentReviewsRes = await statisticsService.getInstructorRecentReviews();
+        setRecentReviews(
+          recentReviewsRes.data.map((review) => ({
+            username: review.name,
+            rating: review.rating,
+            content: review.review,
+            photo: review.profile_photo,
+            course: review.title,
+          }))
+        );
 
-    // Mock upcoming tasks
-    setUpcoming([
-      { title: "Grade Quiz 1 - Embedded", due: "July 2, 2025" },
-      { title: "Lecture: Signals & Systems", due: "July 4, 2025" },
-    ]);
+        const recentActivitiesRes = await statisticsService.getInstructorRecentActivities();
+        setActivities(recentActivitiesRes.data.map((activity) => activity.reference));
 
-    // Mock announcements
-    setAnnouncements(["📢 Staff meeting scheduled for July 6 at 2PM", "Midterms to be uploaded by July 8"]);
+        const upcomingDeadLinesRes = await statisticsService.getInstructorUpcomingDeadlines();
+        setUpcoming(
+          upcomingDeadLinesRes.data.map((item) => ({
+            title: `${item.title} - ${item.student_name}`,
+            due: new Date(item.submitted_at).toLocaleDateString(),
+            course: item.course_title,
+          }))
+        );
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsPending(false);
+      }
+    };
+
+    fetchStats();
   }, []);
 
   const cards = [
-    { title: "Courses Created", value: stats.coursesCreated, icon: faBook, color: "text-indigo-600" },
-    { title: "Assignments Due", value: stats.assignmentsDue, icon: faClipboardCheck, color: "text-orange-500" },
+    { title: "Total Courses", value: stats.totalCourses, icon: faBook, color: "text-indigo-600" },
+    { title: "My Courses", value: stats.myCourses, icon: faClipboardCheck, color: "text-orange-500" },
     { title: "Students Reached", value: stats.studentsReached, icon: faUsers, color: "text-green-600" },
-    { title: "New Resources", value: stats.newResources, icon: faBookOpen, color: "text-pink-500" },
+    { title: "Reviews for my courses", value: stats.totalReviews, icon: faBookOpen, color: "text-pink-500" },
   ];
 
   const Card = ({ title, value, icon, color }) => (
     <div className="bg-white shadow-md rounded-xl p-4 flex items-center space-x-3">
-      <div className={`text-sm ${color}`}>
+      <div className={`text-2xl ${color}`}>
         <FontAwesomeIcon icon={icon} />
       </div>
       <div>
+        <p className="text-4xl font-bold text-gray-900">{value}</p>
         <h4 className="text-sm text-gray-500">{title}</h4>
-        <p className="text-lg font-bold text-gray-900">{value}</p>
       </div>
     </div>
   );
@@ -76,6 +97,28 @@ const InstructorWidgets = ({ user }) => {
       {children}
     </div>
   );
+
+  if (isPending) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          Error loading dashboard: {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -98,24 +141,40 @@ const InstructorWidgets = ({ user }) => {
           </Section>
 
           {/* Upcoming Tasks */}
-          <Section title="Upcoming Deadlines" icon={faClock}>
+          <Section title="Pending Grades" icon={faClock}>
             <ul className="text-sm text-gray-700 space-y-1">
               {upcoming.map((task, idx) => (
                 <li key={idx}>
                   <span className="font-medium">{task.title}</span> —{" "}
-                  <span className="text-red-500">by {task.due}</span>
+                  <span className="text-red-500">submitted on {task.due}</span>
+                  <span className="block text-xs text-gray-500">{task.course}</span>
                 </li>
               ))}
             </ul>
           </Section>
         </div>
 
-        {/* Right Column (Announcements) */}
+        {/* Right Column (Recent Reviews) */}
         <div className="flex-1 lg:max-w-md">
-          <Section title="Announcements" icon={faBullhorn}>
-            <ul className="text-sm text-gray-700 list-disc ml-6">
-              {announcements.map((a, idx) => (
-                <li key={idx}>{a}</li>
+          <Section title="Recent Reviews" icon={faStar}>
+            <ul className="space-y-4">
+              {recentReviews.map((review, idx) => (
+                <li key={idx} className="flex items-start space-x-3">
+                  <img
+                    src={getImageUrl(review.photo)}
+                    alt={review.username}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-medium text-gray-800">{review.username}</p>
+                    <p className="text-gray-800 text-sm">
+                      {"⭐".repeat(review.rating)}
+                      {"☆".repeat(5 - review.rating)}
+                      <span className="ml-2 text-xs text-gray-500">{review.course}</span>
+                    </p>
+                    <p className="text-gray-700 text-sm">{review.content}</p>
+                  </div>
+                </li>
               ))}
             </ul>
           </Section>
@@ -124,4 +183,5 @@ const InstructorWidgets = ({ user }) => {
     </div>
   );
 };
+
 export default InstructorWidgets;
