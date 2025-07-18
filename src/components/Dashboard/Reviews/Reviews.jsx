@@ -11,6 +11,9 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
   const [editingReview, setEditingReview] = useState(null);
   const [newReview, setNewReview] = useState({ rating: 0, review: "" });
   const { id } = useParams();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Fixed typo (removed extra 'b')
 
   const handleToggles = () => {
     setCount((prev) => (prev === 5 ? 100 : 5));
@@ -25,20 +28,21 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
   };
 
   const handleDelete = async (id) => {
+    setIsDeleting(true);
     try {
       await reviewService.deleteReview(id);
-
-      setTimeout(() => {
-        setReviews(reviews.filter((r) => r.rating_id !== id));
-      }, 1000);
+      setReviews(reviews.filter((r) => r.rating_id !== id)); // Removed setTimeout
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   const handleSubmit = async () => {
     if (editingReview) {
       // Edit mode
+      setIsEditing(true);
       editingReview.rating = newReview.rating;
       editingReview.review = newReview.review;
 
@@ -46,6 +50,8 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
         await reviewService.updeteReview(editingReview, editingReview.rating_id);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsEditing(false);
       }
     } else {
       // Add mode
@@ -55,15 +61,17 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
         review: newReview.review,
       };
 
+      setIsSubmitting(true);
       try {
         const res = await reviewService.createReview(id, newRating);
-
         if (res.data) {
           const newReview = res.data;
           setReviews([newReview, ...reviews]);
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsSubmitting(false);
       }
     }
 
@@ -100,8 +108,14 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
             className="w-full border rounded p-2 mb-2 text-sm"
             placeholder="Write your thoughts.... Click the stars above for ratings.You can not add more than one review"
           ></textarea>
-          <button onClick={handleSubmit} className="px-4 py-1 text-white bg-[var(--color-accent)] rounded text-sm">
-            {editingReview ? "Update" : "Submit"}
+          <button
+            onClick={handleSubmit}
+            disabled={isSubmitting || isEditing} // Disable during submission/editing
+            className={`px-4 py-1 text-white bg-[var(--color-accent)] rounded text-sm ${
+              isSubmitting || isEditing ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {editingReview ? (isEditing ? "Updating..." : "Update") : isSubmitting ? "Submitting..." : "Submit"}
           </button>
         </div>
       )}
@@ -125,11 +139,19 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
 
             {user?.user_id === rev.student_id && isPrivileged && (
               <div className="mt-2 space-x-3 text-sm">
-                <button onClick={() => handleEdit(rev)} className="px-2 rounded-xl w-14">
-                  Edit
+                <button
+                  onClick={() => handleEdit(rev)}
+                  disabled={isEditing || isDeleting} // Disable during edit/delete
+                  className={`px-2 rounded-xl w-28 ${isEditing || isDeleting ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  {isEditing ? "Editing..." : "Edit"}
                 </button>
-                <button onClick={() => handleDelete(rev.rating_id)} className=" px-2 rounded-xl w-14">
-                  Delete
+                <button
+                  onClick={() => handleDelete(rev.rating_id)}
+                  disabled={isDeleting || isEditing} // Disable during delete/edit
+                  className={`px-2 rounded-xl w-28 ${isDeleting || isEditing ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  {isDeleting ? "Deleting..." : "Delete"}
                 </button>
               </div>
             )}

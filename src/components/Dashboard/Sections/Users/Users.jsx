@@ -108,7 +108,6 @@ const Users = () => {
   if (loading) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Students</h1>
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
@@ -120,7 +119,6 @@ const Users = () => {
   if (error) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Students</h1>
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           Error loading students: {error}
         </div>

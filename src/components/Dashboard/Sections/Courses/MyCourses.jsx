@@ -75,8 +75,28 @@ const MyCourses = () => {
     }
   };
 
-  if (loading) return <div>Loading your courses...</div>;
-  if (error) return <div className="text-red-600">Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">My Courses</h1>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">My Courses</h1>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          Error loading courses: {error}
+        </div>
+      </div>
+    );
+  }
+
   if (myCourses.length === 0) return <div>You is no course to display.</div>;
 
   return (
