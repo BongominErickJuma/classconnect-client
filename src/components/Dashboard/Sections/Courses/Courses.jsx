@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { courseService, getImageUrl } from "../../../../Services/api";
 import { Link } from "react-router-dom";
-import CourseHeader from "./courseHeader";
+import CourseHeader from "./CourseHeader";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
