@@ -2,8 +2,8 @@ import axios from "axios";
 
 // Create axios instance with base config
 const api = axios.create({
-  // baseURL: "http://localhost:3000/api/v1/ecl",
-  baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl",
+  baseURL: "http://localhost:3000/api/v1/ecl",
+  // baseURL: "https://classconnect-server-fxpq.onrender.com/api/v1/ecl",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -28,8 +28,8 @@ api.interceptors.response.use(
 
 export function getImageUrl(relativePath) {
   if (!relativePath) return ""; // fallback
-  // return `${`http://localhost:3000`}${relativePath}`;
-  return `${`https://classconnect-server-fxpq.onrender.com`}${relativePath}`;
+  return `${`http://localhost:3000`}${relativePath}`;
+  // return `${`https://classconnect-server-fxpq.onrender.com`}${relativePath}`;
 }
 
 // Auth Service
@@ -277,5 +277,14 @@ export const statisticsService = {
   },
   getInstructorDashboardMetrics: async () => {
     return await api.get("/stats/instructor-dashboard-metrics");
+  },
+};
+
+export const notificationService = {
+  getAllNotifications: async (user_id) => {
+    return await api.get(`/notifications?user_id=${user_id}&read=false`);
+  },
+  openNotification: async (id) => {
+    return await api.patch(`/notifications/${id}`);
   },
 };
