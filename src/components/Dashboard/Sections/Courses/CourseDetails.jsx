@@ -121,8 +121,8 @@ const CourseDetails = () => {
         <MetricCard title="Reviews" value={reviews.length} icon="⭐" />
       </div>
 
-      <Resources resources={resources} isCourseInstructor={isCourseInstructor} />
-      <Assignments assignments={assignments} isCourseInstructor={isCourseInstructor} />
+      <Resources resources={resources} isCourseInstructor={isCourseInstructor} isEnrolled={isEnrolled} />
+      <Assignments assignments={assignments} isCourseInstructor={isCourseInstructor} isEnrolled={isEnrolled} />
       <Reviews reviews={reviews} isEnrolled={isEnrolled} />
     </div>
   );

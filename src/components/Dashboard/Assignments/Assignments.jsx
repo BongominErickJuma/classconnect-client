@@ -6,7 +6,7 @@ import { assignmentService } from "../../../Services/api";
 import { Link, useParams } from "react-router-dom";
 import useCurrentUser from "../../Hooks/useCurrentUser";
 
-const Assignments = ({ assignments: initialAssignments, isCourseInstructor }) => {
+const Assignments = ({ assignments: initialAssignments, isCourseInstructor, isEnrolled }) => {
   const [assignments, setAssignments] = useState(initialAssignments);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -143,7 +143,7 @@ const Assignments = ({ assignments: initialAssignments, isCourseInstructor }) =>
                 Due: <span className="text-gray-600">{assignment.due_date.split("T")[0]}</span>
               </p>
               <div className="flex gap-2">
-                {(user.role === "student" || isCourseInstructor) && (
+                {((user.role === "student" && isEnrolled) || isCourseInstructor) && (
                   <Link
                     to={`/dashboard/assignments/${assignment.assignment_id}`}
                     className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm navLink"

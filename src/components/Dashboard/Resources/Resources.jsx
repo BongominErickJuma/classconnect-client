@@ -7,7 +7,7 @@ import { getImageUrl, resourcesService } from "../../../Services/api";
 import { useParams } from "react-router-dom";
 import useCurrentUser from "../../Hooks/useCurrentUser";
 
-const Resources = ({ resources: initialResources, isCourseInstructor }) => {
+const Resources = ({ resources: initialResources, isCourseInstructor, isEnrolled }) => {
   const [resources, setResources] = useState(initialResources);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -172,7 +172,7 @@ const Resources = ({ resources: initialResources, isCourseInstructor }) => {
               </div>
 
               <div className="flex justify-between items-center mt-4">
-                {user.role === "student" && (
+                {user.role === "student" && isEnrolled && (
                   <>
                     {resource.link && (
                       <a
