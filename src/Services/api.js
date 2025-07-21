@@ -28,8 +28,11 @@ api.interceptors.response.use(
 
 export function getImageUrl(relativePath) {
   if (!relativePath) return ""; // fallback
-  // return `${`http://localhost:3000`}${relativePath}`;
-  return `${`https://classconnect-server-fxpq.onrender.com`}${relativePath}`;
+  // relativePath = relativePath.startsWith("https") ? relativePath : `${`http://localhost:3000`}${relativePath}`;
+  relativePath = relativePath.startsWith("https")
+    ? relativePath
+    : `${`https://classconnect-server-fxpq.onrender.com`}${relativePath}`;
+  return relativePath;
 }
 
 // Auth Service
