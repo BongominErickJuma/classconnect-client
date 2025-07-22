@@ -14,6 +14,7 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    console.log(error);
     // Standard error handling
     if (error.response) {
       const message = error.response.data?.message || "An error occurred";
