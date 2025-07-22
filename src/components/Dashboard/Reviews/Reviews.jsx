@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import useCurrentUser from "../../Hooks/useCurrentUser";
-import { reviewService } from "../../../Services/api";
+import { getImageUrl, reviewService } from "../../../Services/api";
 
 const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
   const { user } = useCurrentUser();
@@ -122,10 +122,17 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
 
       {/* Review Items */}
       <div className="space-y-4">
-        {reviews.slice(0, count).map((rev) => (
-          <div key={rev.rating_id} className="border-b border-gray-200 pb-4 last:border-0 last:pb-0">
-            <div className="flex justify-between mb-1">
-              <h3 className="font-medium">{user?.id === rev.student_id ? "You" : "Student"}</h3>
+        {reviews.slice(0, count).map((rev, ind) => (
+          <div key={ind} className="border-b border-gray-200 pb-4 last:border-0 last:pb-0">
+            <div className="flex justify-between items-center mb-1">
+              <div className="flex items-center gap-2">
+                <img
+                  src={getImageUrl(rev.profile_photo)}
+                  alt={rev.name}
+                  className="w-8 h-8 rounded-full object-cover"
+                />
+                <h3 className="font-medium">{rev.name}</h3>
+              </div>
               <div className="flex items-center">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span key={i} className={i < rev.rating ? "text-yellow-400" : "text-gray-300"}>
@@ -134,6 +141,7 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
                 ))}
               </div>
             </div>
+
             <p className="text-gray-500 text-sm mb-1">{new Date(rev.rated_at).toLocaleDateString()}</p>
             <p className="text-gray-700">{rev.review || "No comment"}</p>
 

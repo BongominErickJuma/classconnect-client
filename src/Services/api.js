@@ -214,7 +214,7 @@ export const resourcesService = {
 
 export const reviewService = {
   getReview: async (params) => {
-    return await api.get(`/courses/ratings?${params}`);
+    return await api.get(`/courses/ratings/course-ratings/${params}`);
   },
   createReview: async (course_id, reviewData) => {
     return await api.post(`/courses/${course_id}/ratings`, reviewData);

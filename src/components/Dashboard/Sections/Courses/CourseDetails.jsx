@@ -43,7 +43,7 @@ const CourseDetails = () => {
         }
 
         if (courseData) {
-          const reviews = await reviewService.getReview(`course_id=${id}`);
+          const reviews = await reviewService.getReview(`${id}`);
           setReviews(reviews.data);
 
           const resource = await resourcesService.getAllresources(`course_id=${id}`);
