@@ -142,7 +142,7 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
               </div>
             </div>
 
-            <p className="text-gray-500 text-sm mb-1">{new Date(rev.rated_at).toLocaleDateString()}</p>
+            <p className="text-gray-500 text-sm mb-1">{new Date(rev.created_at).toLocaleDateString()}</p>
             <p className="text-gray-700">{rev.review || "No comment"}</p>
 
             {user?.user_id === rev.student_id && isPrivileged && (
