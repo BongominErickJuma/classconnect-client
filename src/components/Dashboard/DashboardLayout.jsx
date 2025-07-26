@@ -26,7 +26,7 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div
-      className="flex flex-col md:flex-row lg:h-screen overflow-hidden w-full"
+      className="flex flex-col md:flex-row min-h-screen overflow-hidden w-full"
       style={{ backgroundColor: "var(--color-primary-bg)" }}
     >
       {/* Mobile Components */}
