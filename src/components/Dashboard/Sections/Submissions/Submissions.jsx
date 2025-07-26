@@ -104,7 +104,7 @@ const Submissions = ({ submissions: initialSubmissions }) => {
   };
 
   return (
-    <div className="p-6">
+    <div>
       <SubmissionHeader
         filterStatus={filterStatus}
         setFilterStatus={setFilterStatus}

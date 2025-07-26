@@ -80,7 +80,7 @@ const Reviews = ({ reviews: initialReviews = [], isEnrolled }) => {
   };
 
   return (
-    <div className="shadow rounded-lg p-6">
+    <div className="rounded-lg">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-[var(--color-text-base)]">Course Reviews</h2>
         <Link onClick={handleToggles}>{views}</Link>

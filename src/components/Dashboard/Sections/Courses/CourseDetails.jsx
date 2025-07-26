@@ -103,7 +103,7 @@ const CourseDetails = () => {
   const isCourseInstructor = user.user_id === instructor.user_id;
 
   return (
-    <div className="p-6  mx-auto">
+    <div className="mx-auto">
       {/* Course Header Section */}
       <CourseInfo
         course={course}
@@ -131,16 +131,17 @@ const CourseDetails = () => {
 // Metric Card Component
 const MetricCard = ({ title, value, link, icon }) => {
   return (
-    <a href={link} className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-3">
+    <a
+      href={link}
+      className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow flex flex-col items-start md:items-center space-y-1"
+    >
+      <div className="flex items-center gap-2">
         <span className="text-2xl">{icon}</span>
-        <div>
-          <p className="text-gray-500 text-sm">{title}</p>
-          <p className="text-xl font-bold" style={{ color: "var(--color-text-base)" }}>
-            {value.toLocaleString()}
-          </p>
-        </div>
+        <p className="text-xl font-bold" style={{ color: "var(--color-text-base)" }}>
+          {value.toLocaleString()}
+        </p>
       </div>
+      <p className="text-gray-500 text-sm">{title}</p>
     </a>
   );
 };

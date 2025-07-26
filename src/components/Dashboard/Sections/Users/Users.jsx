@@ -127,7 +127,7 @@ const Users = () => {
   }
 
   return (
-    <div className="p-6 flex flex-col justify-between">
+    <div className="flex flex-col justify-between">
       {/* Header and Search */}
       <Head
         currentPage={currentPage}

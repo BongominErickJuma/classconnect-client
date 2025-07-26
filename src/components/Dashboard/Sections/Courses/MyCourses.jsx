@@ -100,7 +100,7 @@ const MyCourses = () => {
   if (myCourses.length === 0) return <div>You is no course to display.</div>;
 
   return (
-    <div className="p-6">
+    <div className="py-6">
       <h1 className="text-2xl font-bold mb-6">My Courses</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {myCourses.map((course) => (
@@ -112,7 +112,7 @@ const MyCourses = () => {
               <img src={getImageUrl(course.cover_image)} alt={course.title} className="w-full h-full object-cover" />
             </div>
 
-            <div className="p-6">
+            <div className="py-6 px-1">
               <div className="flex justify-between items-start mb-2">
                 <h2 className="text-xl font-semibold line-clamp-2">{course.title}</h2>
                 <div className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">

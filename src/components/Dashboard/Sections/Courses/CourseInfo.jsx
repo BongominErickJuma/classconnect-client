@@ -41,7 +41,7 @@ const CourseInfo = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 mb-8 p-6">
+    <div className="flex flex-col md:flex-row gap-6 mb-8">
       {/* Course Cover Image */}
       <div className="w-full md:w-1/3 lg:w-1/4 h-64  overflow-hidden">
         <img src={getImageUrl(course.cover_image)} alt={course.title} className="w-full h-full object-cover" />

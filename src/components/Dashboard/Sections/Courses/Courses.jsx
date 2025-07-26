@@ -65,7 +65,7 @@ const Courses = () => {
   }
 
   return (
-    <div className="p-6 flex flex-col justify-between">
+    <div className="flex flex-col justify-between">
       <CourseHeader
         currentPage={currentPage}
         limit={limit}
@@ -108,7 +108,7 @@ const Courses = () => {
                 )}
               </div>
 
-              <div className="p-6">
+              <div className="py-6 px-1">
                 <div className="flex justify-between items-start mb-2">
                   <h2 className="text-xl font-semibold line-clamp-2">{course.title}</h2>
                   <div className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">
@@ -120,7 +120,10 @@ const Courses = () => {
                 <p className="text-gray-600 mb-4 line-clamp-3">{course.description}</p>
 
                 <div className="flex justify-end items-center">
-                  <Link to={`/dashboard/courses/${course.course_id}`} className="px-4 py-2 text-white rounded navLink">
+                  <Link
+                    to={`/dashboard/courses/${course.course_id}`}
+                    className="px-4 py-2 text-white rounded navLink w-full text-center"
+                  >
                     View Details
                   </Link>
                 </div>

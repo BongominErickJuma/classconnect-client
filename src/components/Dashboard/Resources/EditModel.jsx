@@ -43,9 +43,7 @@ const EditModel = ({ handleEditSubmit, handleInputChange, formData, setShowEditM
               required
             >
               <option value="pdf">PDF</option>
-              <option value="video">Video</option>
               <option value="document">Document</option>
-              <option value="link">Link</option>
             </select>
           </div>
           <div className="mb-4">

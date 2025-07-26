@@ -36,6 +36,17 @@ export function getImageUrl(relativePath) {
   return relativePath;
 }
 
+export function getFileUrl(relativePath) {
+  if (!relativePath) return "";
+  // If it's already a full Cloudinary URL
+  if (relativePath.startsWith("https://res.cloudinary.com")) {
+    return relativePath.replace("/upload/", "/upload/fl_attachment:false/");
+  }
+
+  // Fallback for local or server-based files
+  return `${"http://localhost:3000"}${relativePath}`;
+}
+
 // Auth Service
 export const authService = {
   login: async (credentials) => {

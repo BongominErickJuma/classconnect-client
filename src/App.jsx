@@ -18,7 +18,7 @@ import Users from "./components/Dashboard/Sections/Users/Users";
 const App = () => {
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-4"
+      className="min-h-screen flex items-center justify-center"
       style={{ backgroundColor: "var(--color-primary-bg)" }}
     >
       <Routes>

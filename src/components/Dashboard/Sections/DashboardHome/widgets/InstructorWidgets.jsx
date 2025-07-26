@@ -77,14 +77,14 @@ const InstructorWidgets = () => {
   ];
 
   const Card = ({ title, value, icon, color }) => (
-    <div className="bg-white shadow-md rounded-xl p-4 flex items-center space-x-3">
-      <div className={`text-2xl ${color}`}>
-        <FontAwesomeIcon icon={icon} />
-      </div>
-      <div>
+    <div className="bg-white shadow-md rounded-xl p-4 flex flex-col items-start md:items-center space-y-1">
+      <div className="flex items-start space-x-2">
+        <div className={`text-2xl ${color}`}>
+          <FontAwesomeIcon icon={icon} />
+        </div>
         <p className="text-4xl font-bold text-gray-900">{value}</p>
-        <h4 className="text-sm text-gray-500">{title}</h4>
       </div>
+      <h4 className="text-sm text-gray-500">{title}</h4>
     </div>
   );
 

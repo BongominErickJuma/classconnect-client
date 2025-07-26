@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import AddModel from "./AddModel";
 import EditModel from "./EditModel";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
-
-import { getImageUrl, resourcesService } from "../../../Services/api";
 import { useParams } from "react-router-dom";
 import useCurrentUser from "../../Hooks/useCurrentUser";
 
@@ -14,6 +12,8 @@ const Resources = ({ resources: initialResources, isCourseInstructor, isEnrolled
   const [currentResource, setCurrentResource] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [resourceToDelete, setResourceToDelete] = useState(null);
+  const [isAddingRes, setIsAddingRes] = useState(false);
+  const [isEdittingRes, setIsEdittingRes] = useState(false);
 
   const { id } = useParams();
   const { user } = useCurrentUser();
@@ -100,11 +100,17 @@ const Resources = ({ resources: initialResources, isCourseInstructor, isEnrolled
     if (formData.file instanceof File) {
       formDataUpload.append("file_url", formData.file); // match backend
     }
+    setIsAddingRes(true);
+    try {
+      const res = await resourcesService.createResourse(id, formDataUpload);
 
-    const res = await resourcesService.createResourse(id, formDataUpload);
-
-    setResources([...resources, res.data]);
-    setShowAddModal(false);
+      setResources([...resources, res.data]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsAddingRes(false);
+      setShowAddModal(false);
+    }
   };
 
   const handleEditSubmit = async (e) => {
@@ -144,7 +150,7 @@ const Resources = ({ resources: initialResources, isCourseInstructor, isEnrolled
   };
 
   return (
-    <div className="p-6 shadow my-5">
+    <div className="my-3">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold">Resources</h1>
         {isCourseInstructor && (
@@ -160,7 +166,7 @@ const Resources = ({ resources: initialResources, isCourseInstructor, isEnrolled
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {resources.map((resource) => (
           <div key={resource.resource_id} className="border rounded-lg">
-            <div className="p-5">
+            <div className="p-2">
               <div className="flex items-start mb-3">
                 <span className="text-2xl mr-3">{getIconForType(resource.type)}</span>
                 <div>
@@ -187,12 +193,13 @@ const Resources = ({ resources: initialResources, isCourseInstructor, isEnrolled
 
                     {resource.file_url && (
                       <a
-                        href={getImageUrl(resource.file_url)}
+                        // href={getFileUrl(resource.file_url)}
+                        href={resource.file_url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 hover:text-blue-700 text-sm font-medium"
                       >
-                        {resource.type === "link" ? "Visit Link" : "Download"}
+                        Open
                       </a>
                     )}
                   </>
@@ -226,6 +233,7 @@ const Resources = ({ resources: initialResources, isCourseInstructor, isEnrolled
           handleInputChange={handleInputChange}
           formData={formData}
           setShowAddModal={setShowAddModal}
+          isAddingRes={isAddingRes}
         />
       )}
 

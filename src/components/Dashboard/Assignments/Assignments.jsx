@@ -107,7 +107,7 @@ const Assignments = ({ assignments: initialAssignments, isCourseInstructor, isEn
   };
 
   return (
-    <div className="p-6 shadow my-2">
+    <div className="my-2">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold" style={{ color: "var(--color-text-base)" }}>
           Assignments
@@ -124,7 +124,7 @@ const Assignments = ({ assignments: initialAssignments, isCourseInstructor, isEn
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {assignments.map((assignment) => (
-          <div key={assignment.assignment_id} className="p-6 rounded-lg border ">
+          <div key={assignment.assignment_id} className="p-2 rounded-lg border ">
             <div className="flex justify-between items-start mb-2">
               <h2 className="text-xl font-semibold" style={{ color: "var(--color-text-base)" }}>
                 {assignment.title}

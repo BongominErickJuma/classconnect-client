@@ -62,7 +62,7 @@ const AssignmentDetails = () => {
   }
 
   return (
-    <div className="mx-auto p-6 rounded-xl shadow-md mt-8">
+    <div className="mx-auto rounded-xl mt-8">
       <Link
         to={`/dashboard/courses/${assignment.course_id}`}
         className="px-6 py-2 my-6 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 transition"
