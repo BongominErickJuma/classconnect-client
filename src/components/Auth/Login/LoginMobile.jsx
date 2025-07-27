@@ -6,11 +6,11 @@ import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
 const LoginMobile = ({ formData, handleChange, handleSubmit, isLoading, error }) => (
   <div
-    className="md:hidden w-full max-w-md p-6 sm:p-8 rounded-lg shadow-lg"
+    className="md:hidden w-full p-2 sm:p-8 rounded-lg shadow-lg h-screen"
     style={{ backgroundColor: "var(--color-light-bg)" }}
   >
     <div className="mb-6 flex flex-col items-center">
-      <img src="/images/img_phone.png" alt="Mobile App Logo" className="w-16 h-16 mb-3 object-contain" />
+      <img src="/images/img_phone.png" alt="Mobile App Logo" className="w-32 h-32 mb-3 object-contain" />
 
       <h1 className="text-3xl font-bold flex items-center gap-2" style={{ color: "var(--color-accent)" }}>
         <Logo />

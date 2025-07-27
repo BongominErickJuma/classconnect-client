@@ -5,7 +5,7 @@ import InputField from "./InputField";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
 const LoginDesktop = ({ formData, handleChange, handleSubmit, isLoading, error }) => (
-  <div className="hidden md:flex w-full max-w-4xl bg-white rounded-lg shadow-lg">
+  <div className="hidden md:flex w-full max-w-6xl bg-white rounded-lg shadow-lg">
     <div
       className="w-1/2 flex items-center justify-center p-8 bg-light-bg"
       style={{ backgroundColor: "var(--color-light-bg)" }}

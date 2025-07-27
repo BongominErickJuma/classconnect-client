@@ -5,7 +5,7 @@ import LoginMobile from "./LoginMobile";
 
 const LoginForm = ({ formData, handleChange, handleSubmit, isLoading, error }) => (
   <div
-    className="min-h-screen flex items-center justify-center p-4"
+    className="min-h-screen flex items-center justify-center w-full"
     style={{ backgroundColor: "var(--color-primary-bg)" }}
   >
     <LoginDesktop

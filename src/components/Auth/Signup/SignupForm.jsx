@@ -14,7 +14,7 @@ const SignupForm = ({
   isSubmitting,
   setStep,
 }) => (
-  <div className="min-h-screen flex items-center justify-center p-4 bg-primary-bg">
+  <div className="min-h-screen w-full flex items-center justify-center bg-primary-bg">
     <SignupDesktop
       step={step}
       formData={formData}

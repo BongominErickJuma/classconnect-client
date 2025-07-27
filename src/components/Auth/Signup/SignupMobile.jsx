@@ -15,13 +15,13 @@ const SignupMobile = ({
   isSubmitting,
   setStep,
 }) => (
-  <div className="md:hidden w-full max-w-md bg-white rounded-lg shadow-lg">
+  <div className="md:hidden w-full h-screen bg-white rounded-lg shadow-lg">
     {/* Mobile image at the top */}
     <div className="w-full flex items-center justify-center p-4 bg-light-bg">
       <img src="/images/img_phone.png" alt="App Logo" className="h-32" />
     </div>
 
-    <div className="p-6">
+    <div className="p-2">
       <div className="flex flex-col items-center mb-6">
         <h1 className="text-3xl font-bold flex items-center gap-2 text-accent">
           <Logo /> ClassCon
