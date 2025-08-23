@@ -1,5 +1,6 @@
 import React from "react";
 import useCurrentUser from "../../../Hooks/useCurrentUser";
+import { Card, Button, Badge } from "../../../ui";
 
 const SubmissionTable = ({
   filteredSubmissions,
@@ -11,66 +12,91 @@ const SubmissionTable = ({
 }) => {
   const { user } = useCurrentUser();
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <Card className="overflow-hidden p-0">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-[var(--color-border)]">
+          <thead className="bg-[var(--color-surface)]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">File</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Submitted</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">File</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">Submitted</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">Status</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">Score</th>
               {user.role !== "student" && (
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">Actions</th>
               )}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-[var(--color-background)] divide-y divide-[var(--color-border)]">
             {filteredSubmissions.map((submission) => (
-              <tr key={submission.submission_id} className="hover:bg-gray-50">
+              <tr key={submission.submission_id} className="hover:bg-[var(--color-surface)] transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <span className="mr-2">{getFileIcon(submission.submitted_file)}</span>
-                    <span className="text-sm text-gray-500 truncate max-w-xs">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">{getFileIcon(submission.submitted_file)}</span>
+                    <span className="text-sm text-[var(--color-text-secondary)] truncate max-w-xs font-medium">
                       {submission.submitted_file.split("/").pop()}
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--color-text-secondary)]">
                   {formatDate(submission.submitted_at)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 py-1 text-xs rounded-full ${getStatusBadge(submission.status)}`}>
+                  <Badge 
+                    variant={submission.status === "Graded" ? "success" : submission.status === "Submitted" ? "primary" : submission.status === "Late" ? "warning" : "danger"}
+                  >
                     {submission.status}
-                  </span>
+                  </Badge>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700">{submission.score}</td>
+                <td className="px-6 py-4 text-sm font-semibold text-[var(--color-text-primary)]">
+                  {submission.score ? `${submission.score}/100` : "-"}
+                </td>
                 {user.role !== "student" && (
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                    <a href={submission.submitted_file} className="text-blue-600 hover:text-blue-900" download>
-                      Download
-                    </a>
-                    <button className="rounded px-1" onClick={() => setGradingSubmission(submission)}>
-                      Grade
-                    </button>
-                    <button className="rounded px-1 btnDelete" onClick={() => handleDelete(submission.submission_id)}>
-                      Delete
-                    </button>
+                  <td className="px-6 py-4 whitespace-nowrap text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <Button
+                        size="small"
+                        variant="ghost"
+                        as="a"
+                        href={submission.submitted_file}
+                        download
+                      >
+                        Download
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="primary"
+                        onClick={() => setGradingSubmission(submission)}
+                      >
+                        Grade
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="danger"
+                        onClick={() => handleDelete(submission.submission_id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </td>
                 )}
               </tr>
             ))}
             {filteredSubmissions.length === 0 && (
               <tr>
-                <td colSpan="5" className="text-center py-4 text-sm text-gray-400">
-                  No submissions found.
+                <td colSpan="5" className="text-center py-12">
+                  <div className="flex flex-col items-center gap-3">
+                    <svg className="w-12 h-12 text-[var(--color-text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <p className="text-sm text-[var(--color-text-muted)]">No submissions found</p>
+                  </div>
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-    </div>
+    </Card>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-const GradingSubmission = ({ gradingSubmission, setNewScore, newScore, setGradingSubmission, handleGrade }) => {
+const GradingSubmission = ({ gradingSubmission, setNewScore, newScore, setGradingSubmission, handleGrade, isLoading = false }) => {
   return (
     <div className="fixed inset-0 bg-white bg-opacity-30 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-md w-96">
@@ -20,10 +20,18 @@ const GradingSubmission = ({ gradingSubmission, setNewScore, newScore, setGradin
             Cancel
           </button>
           <button
-            className="px-4 py-1 text-sm bg-green-600 text-white rounded"
+            className="px-4 py-1 text-sm bg-green-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
             onClick={() => handleGrade(gradingSubmission.submission_id)}
+            disabled={isLoading}
           >
-            Submit Grade
+            {isLoading ? (
+              <>
+                <div className="w-4 h-4 mr-2 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Grading...
+              </>
+            ) : (
+              "Submit Grade"
+            )}
           </button>
         </div>
       </div>

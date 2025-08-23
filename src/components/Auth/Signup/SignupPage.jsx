@@ -1,12 +1,13 @@
 // src/components/auth/Signup/SignupPage.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { authService } from "../../../Services/api";
 
 import SignupForm from "./SignupForm";
-import SuccessMessage from "./SuccessMessage";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -16,8 +17,6 @@ const SignupPage = () => {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [signupSuccess, setSignupSuccess] = useState(false);
-  const [signupMessage, setSignupMessage] = useState("");
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -76,8 +75,13 @@ const SignupPage = () => {
         });
 
         if (response.status === "success") {
-          setSignupMessage(response.message);
-          setSignupSuccess(true);
+          // Redirect directly to login page after successful signup
+          navigate("/login", { 
+            state: { 
+              message: "Account created successfully! You can now sign in.",
+              type: "success" 
+            }
+          });
         }
       } catch (error) {
         if (error.response?.data?.errors) {
@@ -96,10 +100,6 @@ const SignupPage = () => {
       setIsSubmitting(false);
     }
   };
-
-  if (signupSuccess) {
-    return <SuccessMessage message={signupMessage} />;
-  }
 
   return (
     <SignupForm

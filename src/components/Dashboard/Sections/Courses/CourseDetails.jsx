@@ -13,6 +13,7 @@ import Resources from "../../Resources/Resources";
 import Assignments from "../../Assignments/Assignments";
 import CourseInfo from "./CourseInfo";
 import useCurrentUser from "../../../Hooks/useCurrentUser";
+import { CourseDetailsSkeleton, Card, Button } from "../../../ui";
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -81,21 +82,38 @@ const CourseDetails = () => {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="p-6">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      </div>
-    );
+    return <CourseDetailsSkeleton />;
   }
 
   if (error) {
     return (
-      <div className="p-6">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          Error loading courses: {error}
-        </div>
+      <div className="min-h-[400px] flex items-center justify-center animate-fade-in">
+        <Card className="max-w-md mx-auto text-center" padding="lg">
+          <div className="mb-4">
+            <div className="w-16 h-16 mx-auto bg-[var(--color-error)]/10 rounded-full flex items-center justify-center mb-4">
+              <svg className="w-8 h-8 text-[var(--color-error)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
+              Course Not Found
+            </h3>
+            <p className="text-[var(--color-text-secondary)] mb-6">
+              {error}
+            </p>
+            <Button 
+              as={Link} 
+              to="/dashboard/featured" 
+              variant="primary"
+              className="inline-flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Courses
+            </Button>
+          </div>
+        </Card>
       </div>
     );
   }
@@ -103,46 +121,78 @@ const CourseDetails = () => {
   const isCourseInstructor = user.user_id === instructor.user_id;
 
   return (
-    <div className="mx-auto">
+    <div className="space-y-8 animate-fade-in">
       {/* Course Header Section */}
-      <CourseInfo
-        course={course}
-        instructor={instructor}
-        isEnrolled={isEnrolled}
-        setIsEnrolled={setIsEnrolled}
-        isCourseInstructor={isCourseInstructor}
-      />
-
-      {/* Course Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <MetricCard title="Students Enrolled" value={totalEnrollments} icon="👥" />
-        <MetricCard title="Resources" value={resources.length} icon="📚" />
-        <MetricCard title="Assignments" value={assignments.length} icon="📝" />
-        <MetricCard title="Reviews" value={reviews.length} icon="⭐" />
+      <div className="animate-slide-in-down">
+        <CourseInfo
+          course={course}
+          instructor={instructor}
+          isEnrolled={isEnrolled}
+          setIsEnrolled={setIsEnrolled}
+          isCourseInstructor={isCourseInstructor}
+        />
       </div>
 
-      <Resources resources={resources} isCourseInstructor={isCourseInstructor} isEnrolled={isEnrolled} />
-      <Assignments assignments={assignments} isCourseInstructor={isCourseInstructor} isEnrolled={isEnrolled} />
-      <Reviews reviews={reviews} isEnrolled={isEnrolled} />
+      {/* Course Metrics */}
+      <div className="animate-slide-in-up" style={{animationDelay: '200ms'}}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <MetricCard title="Students Enrolled" value={totalEnrollments} icon="👥" gradient="bg-gradient-to-br from-blue-500 to-blue-600" />
+          <MetricCard title="Resources" value={resources.length} icon="📚" gradient="bg-gradient-to-br from-green-500 to-green-600" />
+          <MetricCard title="Assignments" value={assignments.length} icon="📝" gradient="bg-gradient-to-br from-purple-500 to-purple-600" />
+          <MetricCard title="Reviews" value={reviews.length} icon="⭐" gradient="bg-gradient-to-br from-yellow-500 to-orange-500" />
+        </div>
+      </div>
+
+      {/* Course Content Sections */}
+      <div className="space-y-8 animate-slide-in-up" style={{animationDelay: '400ms'}}>
+        <Resources resources={resources} isCourseInstructor={isCourseInstructor} isEnrolled={isEnrolled} />
+        <Assignments assignments={assignments} isCourseInstructor={isCourseInstructor} isEnrolled={isEnrolled} />
+        <Reviews reviews={reviews} isEnrolled={isEnrolled} />
+      </div>
     </div>
   );
 };
 
-// Metric Card Component
-const MetricCard = ({ title, value, link, icon }) => {
+// Modern Metric Card Component
+const MetricCard = ({ title, value, link, icon, gradient }) => {
+  const CardComponent = link ? 'a' : 'div';
+  
   return (
-    <a
+    <Card 
+      as={CardComponent}
       href={link}
-      className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow flex flex-col items-start md:items-center space-y-1"
+      className={`group cursor-pointer transform transition-all duration-200 hover:scale-105 hover:shadow-xl border-none text-white relative overflow-hidden ${gradient}`}
+      padding="lg"
     >
-      <div className="flex items-center gap-2">
-        <span className="text-2xl">{icon}</span>
-        <p className="text-xl font-bold" style={{ color: "var(--color-text-base)" }}>
-          {value.toLocaleString()}
-        </p>
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full"></div>
+        <div className="absolute bottom-2 left-2 w-6 h-6 bg-white rounded-full"></div>
       </div>
-      <p className="text-gray-500 text-sm">{title}</p>
-    </a>
+      
+      {/* Content */}
+      <div className="relative z-10">
+        <div className="flex items-center justify-between mb-3">
+          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+            <span className="text-lg">{icon}</span>
+          </div>
+          <div className="text-right">
+            <div className="text-2xl lg:text-3xl font-bold leading-none">
+              {value.toLocaleString()}
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h4 className="font-medium text-white/90 text-sm lg:text-base">
+            {title}
+          </h4>
+        </div>
+        
+        {/* Hover indicator */}
+        <div className="absolute bottom-0 left-0 w-full h-1 bg-white/30 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></div>
+      </div>
+    </Card>
   );
 };
 

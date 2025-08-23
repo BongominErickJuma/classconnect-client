@@ -25,10 +25,7 @@ const DashboardLayout = ({ children }) => {
   const toggleProfile = () => setProfileOpen(!isProfileOpen);
 
   return (
-    <div
-      className="flex flex-col md:flex-row min-h-screen overflow-hidden w-full"
-      style={{ backgroundColor: "var(--color-primary-bg)" }}
-    >
+    <div className="flex min-h-screen bg-[var(--color-primary-bg)] w-full">
       {/* Mobile Components */}
       <MobileHeader isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
       <MobileSidebar
@@ -39,14 +36,22 @@ const DashboardLayout = ({ children }) => {
         closeMenu={() => setMobileMenuOpen(false)}
       />
 
-      {/* Desktop Sidebar */}
-
+      {/* Desktop Sidebar - Fixed */}
       <DesktopSidebar navItems={navItems} activeItem={activeItem} setActiveItem={setActiveItem} />
 
-      {/* Main Content */}
-      <main className="flex-1 w-full flex flex-col " style={{ backgroundColor: "var(--color-light-bg)" }}>
-        <DesktopHeader isProfileOpen={isProfileOpen} toggleProfile={toggleProfile} />
-        <div className="flex-1 p-4 overflow-y-auto custom-scroll">{children}</div>
+      {/* Fixed Header */}
+      <DesktopHeader isProfileOpen={isProfileOpen} toggleProfile={toggleProfile} />
+
+      {/* Main Content Area - Offset for fixed sidebar and header */}
+      <main className="flex-1 ml-0 md:ml-72 pt-24 min-h-screen">
+        {/* Scrollable Content Area */}
+        <div className="h-full overflow-y-auto custom-scroll bg-[var(--color-primary-bg)]">
+          <div className="p-6">
+            <div className="max-w-7xl mx-auto animate-fade-in">
+              {children}
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );

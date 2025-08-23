@@ -6,6 +6,7 @@ import Head from "./Head";
 import UpdateUserModel from "./UpdateUserModel";
 import DeleteUserModal from "./DeleteUserModel";
 import useCurrentUser from "../../../Hooks/useCurrentUser";
+import { UsersSkeleton, Card, Button } from "../../../ui";
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,9 +17,10 @@ const Users = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isUpdatingUser, setIsUpdatingUser] = useState(false);
   const { user } = useCurrentUser();
 
-  const limit = 9;
+  const limit = 6;
 
   // Fetch students once on mount
   useEffect(() => {
@@ -82,14 +84,16 @@ const Users = () => {
   };
 
   const handleUpdateConfirm = async (userId, role) => {
+    setIsUpdatingUser(true);
     try {
       await userService.updateUserRole(userId, { role });
       const response = await userService.getAllUsers();
       setUsers(response.data);
+      handleCloseModals();
     } catch (err) {
       console.error("Update failed", err);
     } finally {
-      handleCloseModals();
+      setIsUpdatingUser(false);
     }
   };
 
@@ -106,94 +110,118 @@ const Users = () => {
 
   // Loading UI
   if (loading) {
-    return (
-      <div className="p-6">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      </div>
-    );
+    return <UsersSkeleton />;
   }
 
   // Error UI
   if (error) {
     return (
-      <div className="p-6">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          Error loading students: {error}
-        </div>
+      <div className="space-y-6">
+        <Card className="text-center border-red-200 bg-red-50" padding="lg">
+          <div className="py-8">
+            <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-red-800 mb-2">Error Loading Users</h3>
+            <p className="text-red-600">{error}</p>
+          </div>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col justify-between">
+    <div className="space-y-8">
       {/* Header and Search */}
-      <Head
-        currentPage={currentPage}
-        limit={limit}
-        filteredUsers={filteredUsers}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-      {/* Students Grid */}
-      <Desktop paginatedUsers={paginatedUsers} onUpdateClick={handleOpenUpdate} onDeleteClick={handleOpenDelete} />
+      <div className="animate-slide-in-down">
+        <Head
+          currentPage={currentPage}
+          limit={limit}
+          filteredUsers={filteredUsers}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+      </div>
+
+      {/* Users Grid */}
+      <div className="animate-slide-in-up">
+        <Desktop paginatedUsers={paginatedUsers} onUpdateClick={handleOpenUpdate} onDeleteClick={handleOpenDelete} />
+      </div>
 
       {/* Mobile View */}
-      <Mobile paginatedUsers={paginatedUsers} />
+      <div className="animate-slide-in-up" style={{ animationDelay: "100ms" }}>
+        <Mobile paginatedUsers={paginatedUsers} />
+      </div>
 
-      {/* No Students */}
+      {/* No Users Found */}
       {filteredUsers.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No Users found</h3>
-          <p className="mt-1 text-sm text-gray-500">Try adjusting your search or filter criteria</p>
+        <div className="animate-slide-in-up" style={{ animationDelay: "200ms" }}>
+          <Card className="text-center" padding="lg">
+            <div className="py-12">
+              <div className="w-24 h-24 mx-auto mb-6 bg-[var(--color-surface)] rounded-full flex items-center justify-center">
+                <svg className="w-12 h-12 text-[var(--color-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
+                No {user.role === "student" ? "Instructors" : "Users"} Found
+              </h3>
+              <p className="text-[var(--color-text-secondary)] max-w-md mx-auto">
+                {searchTerm 
+                  ? "Try adjusting your search criteria to find more users." 
+                  : "No users are currently available in the system."}
+              </p>
+            </div>
+          </Card>
         </div>
       )}
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-8 flex items-center justify-center space-x-2">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={`px-4 py-2 rounded-md ${
-              currentPage === 1
-                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                : "bg-white text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            Previous
-          </button>
+        <div className="animate-slide-in-up" style={{ animationDelay: "300ms" }}>
+          <Card className="flex items-center justify-center" padding="lg">
+            <div className="flex items-center space-x-2">
+              <Button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                variant="secondary"
+                size="sm"
+              >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+              </Button>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`px-4 py-2 rounded-md ${page === currentPage && "btn-active"}`}
-            >
-              {page}
-            </button>
-          ))}
+              <div className="flex space-x-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    variant={page === currentPage ? "primary" : "ghost"}
+                    size="sm"
+                    className="min-w-[2.5rem]"
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </div>
 
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className={`px-4 py-2 rounded-md ${
-              currentPage === totalPages
-                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                : "bg-white text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            Next
-          </button>
+              <Button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                variant="secondary"
+                size="sm"
+              >
+                Next
+                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Button>
+            </div>
+          </Card>
         </div>
       )}
 
@@ -204,6 +232,7 @@ const Users = () => {
         onClose={handleCloseModals}
         onConfirm={handleUpdateConfirm}
         student={selectedStudent}
+        isLoading={isUpdatingUser}
       />
 
       <DeleteUserModal
