@@ -280,6 +280,15 @@ button:disabled {
 }
 
 /* Modern Animations */
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 @keyframes slideInUp {
   from {
     opacity: 0;
@@ -295,6 +304,17 @@ button:disabled {
   from {
     opacity: 0;
     transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
   }
   to {
     opacity: 1;
@@ -345,6 +365,14 @@ button:disabled {
 
 .animate-slide-in-down {
   animation: slideInDown var(--transition-normal) ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-out;
+}
+
+.animate-slideInFromLeft {
+  animation: slideInFromLeft 0.3s ease-out;
 }
 
 .animate-fade-in {

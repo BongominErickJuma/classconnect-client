@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import NotificationBell from "../MainContent/NotificationBell";
 import ProfileDropdown from "../MainContent/ProfileDropdown";
 import { courseService, userService } from "../../../Services/api";
@@ -26,7 +26,7 @@ const DesktopHeader = ({ isProfileOpen, toggleProfile }) => {
   }, []);
 
   return (
-    <header className="hidden md:flex bg-[var(--color-background)] border-b border-[var(--color-border)] h-24 items-center justify-between px-6 shadow-sm fixed top-0 left-0 md:left-72 right-0 z-40">
+    <header className="hidden lg:flex bg-[var(--color-background)] border-b border-[var(--color-border)] h-24 items-center justify-between px-6 shadow-sm fixed top-0 left-72 right-0 z-40">
       {/* Left Side - Quick Stats */}
       <div className="flex items-center gap-4">
         {/* Quick Stats */}

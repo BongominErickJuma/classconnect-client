@@ -1,10 +1,9 @@
-import React from "react";
 import Logo from "../../../svgs/Logo";
 import NavItem from "./NavItem";
 
 const DesktopSidebar = ({ navItems, activeItem, setActiveItem }) => {
   return (
-    <aside className="hidden md:flex flex-col w-72 bg-[var(--color-background)] border-r border-[var(--color-border)] shadow-sm fixed left-0 top-0 h-full z-30">
+    <aside className="hidden lg:flex flex-col w-72 bg-[var(--color-background)] border-r border-[var(--color-border)] shadow-sm fixed left-0 top-0 h-full z-30">
       {/* Header */}
       <div className="p-6 border-b border-[var(--color-border)] flex-shrink-0">
         <div className="flex items-center gap-3">
