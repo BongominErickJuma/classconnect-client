@@ -1,40 +1,87 @@
 import React from "react";
 import { getImageUrl } from "../../../../Services/api";
+import { Card, Badge } from "../../../ui";
 
 const Mobile = ({ paginatedUsers }) => {
+  const getInitials = (name) =>
+    name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+
+  const getRoleBadgeVariant = (role) => {
+    switch (role) {
+      case "student": return "success";
+      case "instructor": return "primary";
+      case "admin": return "accent";
+      default: return "secondary";
+    }
+  };
+
   return (
-    <div className="md:hidden space-y-4">
+    <div className="md:hidden space-y-3">
       {paginatedUsers.map((user) => (
-        <div key={user.user_id} className="bg-white rounded-lg shadow p-4">
-          <div className="flex items-center space-x-3">
-            {user.profile_photo ? (
-              <img
-                className="h-12 w-12 rounded-full object-cover"
-                src={getImageUrl(user.profile_photo)}
-                alt={user.name}
-              />
-            ) : (
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+        <Card
+          key={user.user_id}
+          className="hover:shadow-md transition-shadow duration-200"
+          padding="md"
+        >
+          <div className="flex items-center gap-3">
+            <div className="relative flex-shrink-0">
+              {user.profile_photo ? (
+                <img
+                  className="h-12 w-12 rounded-full object-cover ring-2 ring-[var(--color-border)]"
+                  src={getImageUrl(user.profile_photo)}
+                  alt={user.name}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div
+                className={`h-12 w-12 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)] font-bold text-sm ${
+                  user.profile_photo ? 'hidden' : 'flex'
+                }`}
+                style={{ display: user.profile_photo ? 'none' : 'flex' }}
+              >
                 {getInitials(user.name)}
               </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
-              <p className="text-sm text-gray-500 truncate">{user.email}</p>
+
+              {/* Online indicator */}
+              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
             </div>
-            <span
-              className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                user.role === "student"
-                  ? "bg-green-100 text-green-800"
-                  : user.role === "instructor"
-                  ? "bg-blue-100 text-blue-800"
-                  : "bg-purple-100 text-purple-800"
-              }`}
+
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-[var(--color-text-primary)] truncate">
+                {user.name}
+              </p>
+              <p className="text-xs text-[var(--color-text-secondary)] truncate">
+                {user.email}
+              </p>
+            </div>
+
+            <Badge
+              variant={getRoleBadgeVariant(user.role)}
+              size="sm"
+              className="flex-shrink-0"
             >
               {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-            </span>
+            </Badge>
           </div>
-        </div>
+
+          {/* Quick stats - mobile */}
+          <div className="mt-3 pt-3 border-t border-[var(--color-border)] flex items-center justify-between text-xs text-[var(--color-text-muted)]">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Active now</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span>{user.role === "student" ? "4 courses" : user.role === "instructor" ? "12 classes" : "Admin"}</span>
+            </div>
+          </div>
+        </Card>
       ))}
     </div>
   );

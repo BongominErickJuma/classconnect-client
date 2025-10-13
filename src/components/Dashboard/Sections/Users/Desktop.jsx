@@ -70,12 +70,12 @@ const Desktop = ({ paginatedUsers, onUpdateClick, onDeleteClick }) => {
   };
 
   return (
-    <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
       {paginatedUsers.map((user) => (
-        <Card 
+        <Card
           key={user.user_id}
           className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1 relative"
-          padding="lg"
+          padding="md lg:lg"
         >
           {/* User Profile Section */}
           <div className="flex items-center gap-4 mb-6">

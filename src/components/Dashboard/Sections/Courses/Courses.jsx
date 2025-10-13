@@ -130,48 +130,27 @@ const Courses = () => {
             <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white rounded-full"></div>
           </div>
           
-          <div className="relative z-10 p-6 lg:p-8">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                </div>
-                <div>
-                  <h1 className="text-2xl lg:text-3xl font-bold mb-1">
-                    Featured Courses
-                  </h1>
-                  <p className="text-white/80 text-sm">
-                    Discover and explore our comprehensive course catalog
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 min-w-0">
-                {/* Search Input */}
-                <div className="flex-1 min-w-0 w-full lg:max-w-sm">
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg className="h-5 w-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      placeholder=""
-                      className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/60 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all duration-200"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <span className="block text-center text-white/60 text-xs mt-2">
-                      Search courses by title...
-                    </span>
+          <div className="relative z-10 p-4 sm:p-6 lg:p-8">
+            <div className="flex flex-col gap-4 sm:gap-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 sm:p-3 bg-white/20 rounded-xl backdrop-blur-sm flex-shrink-0">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                  <div className="min-w-0">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+                      Featured Courses
+                    </h1>
+                    <p className="text-white/80 text-xs sm:text-sm mt-1">
+                      Discover and explore our course catalog
+                    </p>
                   </div>
                 </div>
 
-                {/* Decorative Pattern with Course Count */}
-                <div className="relative flex-shrink-0 hidden lg:block">
+                {/* Decorative Pattern with Course Count - Desktop only */}
+                <div className="relative flex-shrink-0 hidden xl:block">
                   <div className="w-32 h-32 bg-white/5 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/10">
                     <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center">
                       <div className="text-center">
@@ -184,21 +163,39 @@ const Courses = () => {
                   <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-blue-400 rounded-full animate-pulse"></div>
                 </div>
               </div>
-            </div>
 
-            {/* Results Info */}
-            {filteredCourses.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-white/20">
-                <p className="text-white/80 text-sm">
-                  Showing {(currentPage - 1) * limit + 1} - {Math.min(currentPage * limit, filteredCourses.length)} of {filteredCourses.length} courses
-                  {searchTerm && (
-                    <span className="ml-2 text-white/60">
-                      • Filtered by "{searchTerm}"
-                    </span>
-                  )}
-                </p>
+              {/* Search Input - Full width on mobile */}
+              <div className="w-full">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg className="h-4 w-4 sm:h-5 sm:w-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search courses by title..."
+                    className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 bg-white/10 border border-white/20 rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-white/60 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all duration-200"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
               </div>
-            )}
+
+              {/* Results Info - Mobile optimized */}
+              {filteredCourses.length > 0 && (
+                <div className="border-t border-white/20 pt-3">
+                  <p className="text-white/80 text-xs sm:text-sm">
+                    Showing {(currentPage - 1) * limit + 1} - {Math.min(currentPage * limit, filteredCourses.length)} of {filteredCourses.length} courses
+                    {searchTerm && (
+                      <span className="ml-1 text-white/60 block sm:inline mt-1 sm:mt-0">
+                        Filtered by "{searchTerm}"
+                      </span>
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </Card>
       </div>
@@ -269,18 +266,18 @@ const Courses = () => {
                 </div>
 
                 {/* Course Content */}
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mb-2 line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors">
+                    <h3 className="text-lg sm:text-xl font-semibold text-[var(--color-text-primary)] mb-1 sm:mb-2 line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors">
                       {course.title}
                     </h3>
-                    <p className="text-[var(--color-text-secondary)] text-sm line-clamp-3 leading-relaxed">
+                    <p className="text-[var(--color-text-secondary)] text-xs sm:text-sm line-clamp-2 sm:line-clamp-3 leading-relaxed">
                       {course.description}
                     </p>
                   </div>
 
                   {/* Course Meta */}
-                  <div className="flex items-center gap-4 text-xs text-[var(--color-text-muted)]">
+                  <div className="flex items-center gap-3 sm:gap-4 text-xs text-[var(--color-text-muted)]">
                     <div className="flex items-center gap-1">
                       <span>👥</span>
                       <span>24 students</span>
@@ -294,9 +291,9 @@ const Courses = () => {
                   {/* Action Button */}
                   <Link
                     to={`/dashboard/courses/${course.course_id}`}
-                    className="block w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-center py-3 px-4 rounded-lg font-medium transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                    className="block w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white text-center py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium text-sm sm:text-base transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
                   >
-                    View Course Details →
+                    View Details →
                   </Link>
                 </div>
               </div>
@@ -308,51 +305,64 @@ const Courses = () => {
 
       {/* Modern Pagination */}
       {totalPages > 1 && (
-        <Card className="mt-12 bg-[var(--color-surface)]/50" padding="lg">
+        <Card className="mt-8 sm:mt-12 bg-[var(--color-surface)]/50" padding="md lg:lg">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-sm text-[var(--color-text-secondary)]">
-              Page {currentPage} of {totalPages} • {filteredCourses.length} total courses
+            <div className="text-xs sm:text-sm text-[var(--color-text-secondary)] text-center sm:text-left">
+              Page {currentPage} of {totalPages} • {filteredCourses.length} total
             </div>
-            
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-1 sm:gap-2">
               <Button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 variant="secondary"
                 size="sm"
-                className="flex items-center gap-2"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                Previous
+                <span className="hidden sm:inline">Previous</span>
               </Button>
 
               <div className="flex items-center gap-1">
-                {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                {Array.from({ length: Math.min(totalPages, 3) }, (_, i) => {
                   let page;
-                  if (totalPages <= 5) {
+                  if (totalPages <= 3) {
                     page = i + 1;
-                  } else if (currentPage <= 3) {
+                  } else if (currentPage === 1) {
                     page = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    page = totalPages - 4 + i;
+                  } else if (currentPage === totalPages) {
+                    page = totalPages - 2 + i;
                   } else {
-                    page = currentPage - 2 + i;
+                    page = currentPage - 1 + i;
                   }
-                  
+
                   return (
                     <Button
                       key={page}
                       onClick={() => handlePageChange(page)}
                       variant={page === currentPage ? "primary" : "ghost"}
                       size="sm"
-                      className="w-10 h-10 p-0"
+                      className="w-8 h-8 sm:w-10 sm:h-10 p-0 text-xs sm:text-sm"
                     >
                       {page}
                     </Button>
                   );
                 })}
+                {totalPages > 3 && currentPage < totalPages - 1 && (
+                  <>
+                    <span className="text-[var(--color-text-muted)] px-1">...</span>
+                    <Button
+                      onClick={() => handlePageChange(totalPages)}
+                      variant="ghost"
+                      size="sm"
+                      className="w-8 h-8 sm:w-10 sm:h-10 p-0 text-xs sm:text-sm"
+                    >
+                      {totalPages}
+                    </Button>
+                  </>
+                )}
               </div>
 
               <Button
@@ -360,10 +370,10 @@ const Courses = () => {
                 disabled={currentPage === totalPages}
                 variant="secondary"
                 size="sm"
-                className="flex items-center gap-2"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3"
               >
-                Next
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span className="hidden sm:inline">Next</span>
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Button>

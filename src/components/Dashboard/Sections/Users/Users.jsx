@@ -181,45 +181,79 @@ const Users = () => {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="animate-slide-in-up" style={{ animationDelay: "300ms" }}>
-          <Card className="flex items-center justify-center" padding="lg">
-            <div className="flex items-center space-x-2">
-              <Button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                variant="secondary"
-                size="sm"
-              >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Previous
-              </Button>
-
-              <div className="flex space-x-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <Button
-                    key={page}
-                    onClick={() => handlePageChange(page)}
-                    variant={page === currentPage ? "primary" : "ghost"}
-                    size="sm"
-                    className="min-w-[2.5rem]"
-                  >
-                    {page}
-                  </Button>
-                ))}
+          <Card className="bg-[var(--color-surface)]/50" padding="md lg:lg">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-xs sm:text-sm text-[var(--color-text-secondary)] text-center sm:text-left">
+                Page {currentPage} of {totalPages} • {filteredUsers.length} total
               </div>
 
-              <Button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                variant="secondary"
-                size="sm"
-              >
-                Next
-                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Button>
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  variant="secondary"
+                  size="sm"
+                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3"
+                >
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  <span className="hidden sm:inline">Previous</span>
+                </Button>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(totalPages, 3) }, (_, i) => {
+                    let page;
+                    if (totalPages <= 3) {
+                      page = i + 1;
+                    } else if (currentPage === 1) {
+                      page = i + 1;
+                    } else if (currentPage === totalPages) {
+                      page = totalPages - 2 + i;
+                    } else {
+                      page = currentPage - 1 + i;
+                    }
+
+                    return (
+                      <Button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        variant={page === currentPage ? "primary" : "ghost"}
+                        size="sm"
+                        className="w-8 h-8 sm:w-10 sm:h-10 p-0 text-xs sm:text-sm"
+                      >
+                        {page}
+                      </Button>
+                    );
+                  })}
+                  {totalPages > 3 && currentPage < totalPages - 1 && (
+                    <>
+                      <span className="text-[var(--color-text-muted)] px-1">...</span>
+                      <Button
+                        onClick={() => handlePageChange(totalPages)}
+                        variant="ghost"
+                        size="sm"
+                        className="w-8 h-8 sm:w-10 sm:h-10 p-0 text-xs sm:text-sm"
+                      >
+                        {totalPages}
+                      </Button>
+                    </>
+                  )}
+                </div>
+
+                <Button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  variant="secondary"
+                  size="sm"
+                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3"
+                >
+                  <span className="hidden sm:inline">Next</span>
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Button>
+              </div>
             </div>
           </Card>
         </div>
