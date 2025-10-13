@@ -9,7 +9,7 @@ const MobileSidebar = ({ isOpen, navItems, activeItem, setActiveItem, closeMenu 
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isOpen && !event.target.closest('.mobile-menu-dropdown') && !event.target.closest('.hamburger-button')) {
+      if (isOpen && !event.target.closest('.mobile-menu-sidebar') && !event.target.closest('.hamburger-button')) {
         closeMenu();
       }
     };
