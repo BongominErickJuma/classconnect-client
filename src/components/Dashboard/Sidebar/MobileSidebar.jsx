@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const MobileSidebar = ({ isOpen, navItems, activeItem, setActiveItem, closeMenu }) => {
+  const navigate = useNavigate();
+
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -19,6 +22,20 @@ const MobileSidebar = ({ isOpen, navItems, activeItem, setActiveItem, closeMenu 
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen, closeMenu]);
+
+  const handleNavigation = (itemName) => {
+    setActiveItem(itemName);
+    closeMenu();
+
+    // Navigate to the appropriate route
+    const route = itemName.toLowerCase().replace(/\s+/g, "_");
+
+    if (route === "dashboard") {
+      navigate("/dashboard");
+    } else {
+      navigate(`/dashboard/${route}`);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -49,10 +66,7 @@ const MobileSidebar = ({ isOpen, navItems, activeItem, setActiveItem, closeMenu 
           {navItems.map((item) => (
             <button
               key={item.name}
-              onClick={() => {
-                setActiveItem(item.name);
-                closeMenu();
-              }}
+              onClick={() => handleNavigation(item.name)}
               className={`w-full flex items-center px-4 py-3 text-left transition-colors ${
                 activeItem === item.name
                   ? 'bg-[var(--color-primary)] text-white'
